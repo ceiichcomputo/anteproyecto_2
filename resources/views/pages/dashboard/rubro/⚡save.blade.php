@@ -14,20 +14,36 @@ new class extends Component
     #[Validate('nullable|string')]
     public $descripcion;
 
+    public $rubro;
+
 
     function submit() {
 
         $this->validate();
-        CatRubro::create([
-            'titulo' => $this->titulo,
-            'descripcion' => $this->descripcion,
-        ]);
+
+        if($this->rubro){
+            $this->rubro->update($this->validate());
+            $this->dispatch("updated");
+        }else{
+            CatRubro::create([
+                'titulo' => $this->titulo,
+                'descripcion' => $this->descripcion,
+            ]);
+        }
 
         session()->flash('status', 'Post successfully updated.');
  
         return $this->redirect('/dashboard/rubro');
 
         // dd($this->titulo);
+    }
+
+    function mount(?int $id = null){
+        if($id){
+            $this->rubro = CatRubro::findOrFail($id);
+            $this->titulo = $this->rubro->titulo;
+            $this->descripcion = $this->rubro->descripcion;
+        }
     }
 };
 ?>

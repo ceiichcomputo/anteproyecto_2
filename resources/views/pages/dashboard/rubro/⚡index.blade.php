@@ -44,6 +44,7 @@ new class extends Component
         <flux:table.columns>
             <flux:table.column>ID</flux:table.column>
             <flux:table.column>Título</flux:table.column>
+            <flux:table.column>Descripción</flux:table.column>
             <flux:table.column>Acciones</flux:table.column>
         </flux:table.columns>
 
@@ -52,6 +53,7 @@ new class extends Component
                 <flux:table.row :key="$item->id">
                     <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
                     <flux:table.cell class="whitespace-nowrap">{{ $item->titulo }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal">{{ $item->descripcion }}</flux:table.cell>
                     <flux:table.cell class="whitespace-nowrap"><a href="{{ route('rubro.edit', $item->id) }}" 
                         class="btn btn-sm btn-primary">Editar</a>
                     </flux:table.cell>
