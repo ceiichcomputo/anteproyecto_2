@@ -34,31 +34,31 @@ new class extends Component
         <flux:separator variant="subtle" />
     </div>
     <form wire:submit="search">
-        <input type="text" wire:model="query">
-        <button type="submit">Buscar</button>
-        <button type="button" wire:click="resetSearch">Limpiar</button>
+        <flux:input.group>
+            <flux:input type="text" wire:model="query" size="lg"  />
+            <flux:button type="submit">Buscar</flux:button>
+            <flux:button type="button" wire:click="resetSearch">Limpiar</flux:button>
+        </flux:input.group>
     </form>
-    <table class="table w-full">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Título</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($this->rubros as $item)
-                <tr>
-                    <td>{{ $item->id }}</td>
-                    <td>{{ $item->titulo }}</td>
-                    <td>
-                        <a href="{{ route('rubro.edit', $item->id) }}" class="btn btn-sm btn-primary">Editar</a>
-                    </td>
-                        
-                </tr>
+    <flux:table class="table w-full">
+        <flux:table.columns>
+            <flux:table.column>ID</flux:table.column>
+            <flux:table.column>Título</flux:table.column>
+            <flux:table.column>Acciones</flux:table.column>
+        </flux:table.columns>
+
+        <flux:table.rows>
+            @foreach ($this->rubros as $item)
+                <flux:table.row :key="$item->id">
+                    <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-nowrap">{{ $item->titulo }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-nowrap"><a href="{{ route('rubro.edit', $item->id) }}" 
+                        class="btn btn-sm btn-primary">Editar</a>
+                    </flux:table.cell>
+                </flux:table.row>
             @endforeach
-        </tbody>
-    </table> 
+        </flux:table.rows>
+    </flux:table> 
     <br>
     {{ $this->rubros->links() }}
 </div>
