@@ -23,7 +23,7 @@ new class extends Component
     #[Computed]
     public function rubros()
     {
-        return CatRubro::where('titulo', 'like', '%'.$this->query.'%')->paginate(1);
+        return CatRubro::where('titulo', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
     }
 };
 ?>

@@ -23,7 +23,7 @@ new class extends Component
     #[Computed]
     public function permisos()
     {
-        return Permission::where('name', 'like', '%'.$this->query.'%')->paginate(1);
+        return Permission::where('name', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
     }
 };
 ?>
