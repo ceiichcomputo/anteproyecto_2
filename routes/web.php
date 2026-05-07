@@ -12,11 +12,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::livewire('crear', 'pages::dashboard.rubro.save')->name('rubro.save');
             Route::livewire('editar/{id}', 'pages::dashboard.rubro.save')->name('rubro.edit');
         });
-        //  Route::group(['prefix' => 'categoria'], function () {
-        //     Route::livewire('', 'pages::dashboard.categoria.index')->name('categoria.index');
-        //     Route::livewire('crear', 'pages::dashboard.categoria.save')->name('categoria.save');
-        //     Route::livewire('editar/{id}', 'pages::dashboard.categoria.save')->name('categoria.edit');
-        // });
+        Route::group(['prefix' => 'permisos'], function () {
+            Route::livewire('', 'pages::dashboard.permisos.listado')->name('permisos.listado');
+            Route::livewire('crear', 'pages::dashboard.permisos.agregar')->name('permisos.agregar');
+            Route::livewire('editar/{id}', 'pages::dashboard.permisos.agregar')->name('permisos.editar');
+        });
     });
 
 });
