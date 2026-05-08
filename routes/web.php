@@ -17,6 +17,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::livewire('crear', 'pages::dashboard.permisos.agregar')->name('permisos.agregar');
             Route::livewire('editar/{id}', 'pages::dashboard.permisos.agregar')->name('permisos.editar');
         });
+        Route::group(['prefix' => 'roles'], function () {
+            Route::livewire('', 'pages::dashboard.roles.listado')->name('roles.listado');
+            Route::livewire('crear', 'pages::dashboard.roles.agregar')->name('roles.agregar');
+            Route::livewire('editar/{id}', 'pages::dashboard.roles.agregar')->name('roles.editar');
+        });
     });
 
 });

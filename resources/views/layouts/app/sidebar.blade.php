@@ -15,6 +15,9 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="home" :href="route('roles.listado')" :current="request()->routeIs('roles.listado')" wire:navigate>
+                        {{ __('Roles') }}
+                    </flux:sidebar.item>
                     <flux:sidebar.item icon="home" :href="route('permisos.listado')" :current="request()->routeIs('permisos.listado')" wire:navigate>
                         {{ __('Permisos') }}
                     </flux:sidebar.item>
