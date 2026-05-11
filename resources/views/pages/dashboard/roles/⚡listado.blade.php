@@ -4,6 +4,7 @@ use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Role;
+use Livewire\Attributes\On;
 
 new class extends Component
 {
@@ -25,6 +26,13 @@ new class extends Component
     {
         return Role::where('name', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
     }
+
+    #[On('rol-actualizado')]
+    public function rolActualizado()
+    {
+        dd('rol actualizado');
+        //return Role::where('name', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
+    }
 };
 ?>
 <div>
@@ -33,6 +41,18 @@ new class extends Component
         <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
         <flux:separator variant="subtle" />
     </div>
+
+    @if (session()->has('success'))
+        <div
+            x-data="{ show: true }"
+            x-show="show"
+            x-init="setTimeout(() => show = false, 3000)"
+            class="bg-green-500 text-white p-3 rounded"
+        >
+            {{ session('success') }}
+        </div>
+    @endif
+
     <form wire:submit="search">
         <flux:input.group>
             <flux:input type="text" wire:model="query" size="lg"  />
@@ -53,10 +73,10 @@ new class extends Component
             @foreach ($this->roles as $item)
                 <flux:table.row :key="$item->id">
                     <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->name }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->description }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->guard_name }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap"><a href="{{ route('roles.editar', $item->id) }}" 
+                    <flux:table.cell class="whitespace-normal">{{ $item->name }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal">{{ $item->description }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal">{{ $item->guard_name }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal"><a href="{{ route('roles.editar', $item->id) }}" 
                         class="btn btn-sm btn-primary">Editar</a>
                     </flux:table.cell>
                 </flux:table.row>

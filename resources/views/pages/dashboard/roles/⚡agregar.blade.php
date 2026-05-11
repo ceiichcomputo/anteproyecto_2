@@ -3,6 +3,8 @@
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use App\Models\Role;
+use App\Models\Permission;
+use Livewire\Attributes\On;
 
 new class extends Component
 {
@@ -19,54 +21,110 @@ new class extends Component
     #[Validate('string', message: 'El contenido del nombre debe ser una cadena de texto')]
     public $guard_name;
 
+    public Role $role;
+
     public $rol;
 
+    public $permissions = [];
 
-    function submit() {
+    public $selectedPermissions = [];
 
-        $this->validate();
+    public function mount(?int $id = null)
+    {
+        $this->rol = Role::findOrFail($id);
+        $this->name = $this->rol->name;
+        $this->description = $this->rol->description;
+        $this->guard_name = $this->rol->guard_name;
 
+        $this->permissions = Permission::orderBy('module')->orderBy('name')->get();
+
+        //dd($rol);
+
+        // if($this->rol->permissions->isnotnull()){
+            $this->selectedPermissions = $this->rol->permissions->pluck('name')->toArray();
+        // }
+    }
+
+    public function update()
+    {
         if($this->rol){
             $this->rol->update($this->validate());
-            $this->dispatch("updated");
+            $this->dispatch('rol-actualizado');
+            // $this->dispatch('rol-actualizado', type: 'success', message: 'Rol actualizado correctamente');
         }else{
             Role::create([
                 'name' => $this->name,
                 'description' => $this->description,
                 'guard_name' => $this->guard_name,
             ]);
+
+            $this->dispatch('rol-actualizado', type: 'success', message: 'Rol creado correctamente');
         }
 
-        session()->flash('status', 'Post successfully updated.');
- 
+        //dd($this->selectedPermissions);
+
+        // Sincronizar permisos
+        $this->rol->syncPermissions($this->selectedPermissions);
+
+        session()->flash('success', 'Rol actualizado correctamente');
+
         return $this->redirect('/dashboard/roles');
-
-        // dd($this->module);
     }
 
-    function mount(?int $id = null){
-        if($id){
-            $this->rol = Role::findOrFail($id);
-            $this->name = $this->rol->name;
-            $this->description = $this->rol->description;
-            $this->guard_name = $this->rol->guard_name;
-        }
-    }
+    // public function render()
+    // {
+    //     return view('livewire.roles.edit');
+    // }
 };
 ?>
 
-
-
 <div>
+
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ __('Roles') }}</flux:heading>
         <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
         <flux:separator variant="subtle" />
     </div>
-    <form wire:submit.prevent="submit" class="my-6 w-full space-y-6">
+
+    <form wire:submit="update">
+
+        
         <flux:input label="Nombre" type="text" wire:model="name" />
         <flux:textarea label="Descripción" wire:model="description" />
         <flux:input label="Nombre del Guard" type="text" wire:model="guard_name" />
-        <flux:button variant="primary" type="submit">Guardar</flux:button>
+
+        {{-- Permisos --}}
+        <div class="mb-6">
+
+            <h2 class="text-lg font-semibold mb-4">
+                Permisos
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                @foreach($permissions as $permission)
+                    <label class="flex items-center gap-2 border rounded p-3">
+                        <input
+                            type="checkbox"
+                            value="{{ $permission->name }}"
+                            wire:model="selectedPermissions"
+                        >
+                        <span>
+                            {{ $permission->name }}
+                        </span>
+                    </label>
+                @endforeach
+            </div>
+
+        </div>
+
+        {{-- Botón --}}
+        <div class="flex justify-end">
+            <button
+                type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded"
+            >
+                Guardar
+            </button>
+        </div>
     </form>
 </div>

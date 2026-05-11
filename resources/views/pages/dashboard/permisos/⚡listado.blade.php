@@ -53,10 +53,10 @@ new class extends Component
             @foreach ($this->permisos as $item)
                 <flux:table.row :key="$item->id">
                     <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->module }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->name }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal">{{ $item->module }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal">{{ $item->name }}</flux:table.cell>
                     <flux:table.cell class="whitespace-normal">{{ $item->description }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap"><a href="{{ route('permisos.editar', $item->id) }}" 
+                    <flux:table.cell class="whitespace-normal"><a href="{{ route('permisos.editar', $item->id) }}" 
                         class="btn btn-sm btn-primary">Editar</a>
                     </flux:table.cell>
                 </flux:table.row>
