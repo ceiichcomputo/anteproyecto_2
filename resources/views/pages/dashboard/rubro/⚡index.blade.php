@@ -25,6 +25,15 @@ new class extends Component
     {
         return CatRubro::where('titulo', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
     }
+    
+    public function delete($id)
+    {
+        $rubro = CatRubro::findOrFail($id);
+
+        $rubro->delete();
+
+        session()->flash('success', 'Rubro eliminado correctamente');
+    }
 };
 ?>
 <div>
@@ -56,6 +65,14 @@ new class extends Component
                     <flux:table.cell class="whitespace-normal">{{ $item->descripcion }}</flux:table.cell>
                     <flux:table.cell class="whitespace-nowrap"><a href="{{ route('rubro.edit', $item->id) }}" 
                         class="btn btn-sm btn-primary">Editar</a>
+                        <button
+                            wire:click="delete({{ $item->id }})"
+                            wire:confirm="¿Deseas eliminar este rubro?"
+                            class="bg-red-500 text-white px-3 py-1 rounded"
+                        >
+                            Eliminar
+                        </button>
+
                     </flux:table.cell>
                 </flux:table.row>
             @endforeach

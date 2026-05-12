@@ -31,18 +31,20 @@ new class extends Component
 
     public function mount(?int $id = null)
     {
-        $this->rol = Role::findOrFail($id);
-        $this->name = $this->rol->name;
-        $this->description = $this->rol->description;
-        $this->guard_name = $this->rol->guard_name;
+        if( $id ){
+            $this->rol = Role::findOrFail($id);
+            $this->name = $this->rol->name;
+            $this->description = $this->rol->description;
+            $this->guard_name = $this->rol->guard_name;
+        }
 
         $this->permissions = Permission::orderBy('module')->orderBy('name')->get();
 
         //dd($rol);
 
-        // if($this->rol->permissions->isnotnull()){
+        if( $id ){
             $this->selectedPermissions = $this->rol->permissions->pluck('name')->toArray();
-        // }
+        }
     }
 
     public function update()
@@ -71,6 +73,11 @@ new class extends Component
         return $this->redirect('/dashboard/roles');
     }
 
+    public function regresar()
+    {
+        return $this->redirect('/dashboard/roles');
+    }
+
     // public function render()
     // {
     //     return view('livewire.roles.edit');
@@ -83,6 +90,7 @@ new class extends Component
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ __('Roles') }}</flux:heading>
         <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
+        <flux:button type="button" wire:click="regresar" wire:confirm="Se perderán todos los cambios, ¿Deseas continuar?">Regresar</flux:button>
         <flux:separator variant="subtle" />
     </div>
 
@@ -100,10 +108,10 @@ new class extends Component
                 Permisos
             </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-3 whitespace-normal">
                 @foreach($permissions as $permission)
                     <label class="flex items-center gap-2 border rounded p-3">
-                        <input
+                        <input class="h-4 w-4 text-blue-600"
                             type="checkbox"
                             value="{{ $permission->name }}"
                             wire:model="selectedPermissions"

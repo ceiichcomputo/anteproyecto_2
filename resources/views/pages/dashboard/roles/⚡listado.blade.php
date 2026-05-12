@@ -21,6 +21,11 @@ new class extends Component
         return $this->redirect('/dashboard/roles');
     }
 
+    public function agregarRol()
+    {
+        return $this->redirect('/dashboard/roles/crear');
+    }
+
     #[Computed]
     public function roles()
     {
@@ -39,6 +44,7 @@ new class extends Component
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ __('Roles') }}</flux:heading>
         <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
+        <flux:button type="button" wire:click="agregarRol">Agregar Rol</flux:button>
         <flux:separator variant="subtle" />
     </div>
 

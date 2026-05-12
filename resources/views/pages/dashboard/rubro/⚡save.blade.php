@@ -22,12 +22,19 @@ new class extends Component
         $this->validate();
 
         if($this->rubro){
-            $this->rubro->update($this->validate());
+            $this->rubro->update([
+                'titulo' => $this->titulo,
+                'descripcion' => $this->descripcion,
+                'usuario_mod' => auth()->id(),
+                'updated_at' => now()
+            ]);
             $this->dispatch("updated");
         }else{
             CatRubro::create([
                 'titulo' => $this->titulo,
                 'descripcion' => $this->descripcion,
+                'usuario_mod' => auth()->id(),
+                'updated_at' => now()
             ]);
         }
 
