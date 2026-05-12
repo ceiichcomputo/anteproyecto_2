@@ -15,15 +15,26 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="home" :href="route('roles.listado')" :current="request()->routeIs('roles.listado')" wire:navigate>
-                        {{ __('Roles') }}
-                    </flux:sidebar.item>
-                    <flux:sidebar.item icon="home" :href="route('permisos.listado')" :current="request()->routeIs('permisos.listado')" wire:navigate>
-                        {{ __('Permisos') }}
-                    </flux:sidebar.item>
-                    <flux:sidebar.item icon="home" :href="route('rubro.index')" :current="request()->routeIs('rubro.index')" wire:navigate>
-                        {{ __('Rubro') }}
-                    </flux:sidebar.item>
+                    @can('admin.usuarios.listar')
+                        <flux:sidebar.item icon="home" :href="route('usuarios.listado')" :current="request()->routeIs('usuarios.listado')" wire:navigate>
+                            {{ __('Usuarios') }}
+                        </flux:sidebar.item>
+                    @endcan
+                    @can('admin.roles.listar')
+                        <flux:sidebar.item icon="home" :href="route('roles.listado')" :current="request()->routeIs('roles.listado')" wire:navigate>
+                            {{ __('Roles') }}
+                        </flux:sidebar.item>
+                    @endcan
+                    @can('admin.permisos.listar')
+                        <flux:sidebar.item icon="home" :href="route('permisos.listado')" :current="request()->routeIs('permisos.listado')" wire:navigate>
+                            {{ __('Permisos') }}
+                        </flux:sidebar.item>
+                    @endcan
+                    @can('admin.usuarios.listar')
+                        <flux:sidebar.item icon="home" :href="route('rubro.index')" :current="request()->routeIs('rubro.index')" wire:navigate>
+                            {{ __('Rubro') }}
+                        </flux:sidebar.item>
+                    @endcan
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

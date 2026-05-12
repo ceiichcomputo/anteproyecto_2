@@ -8,6 +8,13 @@ use Livewire\Attributes\On;
 
 new class extends Component
 {
+    public function mount()
+    {
+        if (! auth()->user()->can('admin.roles.listar')) {
+            abort(403);
+        }
+    }
+
     use WithPagination;
     public $query = '';
  
@@ -21,7 +28,7 @@ new class extends Component
         return $this->redirect('/dashboard/roles');
     }
 
-    public function agregarRol()
+    public function agregar()
     {
         return $this->redirect('/dashboard/roles/crear');
     }
@@ -29,14 +36,7 @@ new class extends Component
     #[Computed]
     public function roles()
     {
-        return Role::where('name', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
-    }
-
-    #[On('rol-actualizado')]
-    public function rolActualizado()
-    {
-        dd('rol actualizado');
-        //return Role::where('name', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
+        return Role::where('name', 'like', '%'.$this->query.'%')->orderBy('name')->simplepaginate(10); // paginate(10) --- IGNORE ---
     }
 };
 ?>
@@ -44,7 +44,9 @@ new class extends Component
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ __('Roles') }}</flux:heading>
         <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
-        <flux:button type="button" wire:click="agregarRol">Agregar Rol</flux:button>
+        @can('admin.roles.editar')
+        <flux:button type="button" wire:click="agregar">Agregar Rol</flux:button>
+        @endcan
         <flux:separator variant="subtle" />
     </div>
 
@@ -71,7 +73,6 @@ new class extends Component
             <flux:table.column>ID</flux:table.column>
             <flux:table.column>Nombre</flux:table.column>
             <flux:table.column>Descripción</flux:table.column>
-            <flux:table.column>Guard Name</flux:table.column>
             <flux:table.column>Acciones</flux:table.column>
         </flux:table.columns>
 
@@ -81,7 +82,6 @@ new class extends Component
                     <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
                     <flux:table.cell class="whitespace-normal">{{ $item->name }}</flux:table.cell>
                     <flux:table.cell class="whitespace-normal">{{ $item->description }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->guard_name }}</flux:table.cell>
                     <flux:table.cell class="whitespace-normal"><a href="{{ route('roles.editar', $item->id) }}" 
                         class="btn btn-sm btn-primary">Editar</a>
                     </flux:table.cell>

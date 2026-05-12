@@ -8,18 +8,13 @@ use Livewire\Attributes\On;
 
 new class extends Component
 {
-    #[Validate('required', message: 'Favor de ingresar el nombre del permiso')]
+    #[Validate('required', message: 'Favor de ingresar el nombre del rol')]
     #[Validate('min:2', message: 'La longitud mínima del nombre es de 2 caracteres')]
     #[Validate('max:255', message: 'La longitud máxima del nombre es de 255 caracteres')]
     #[Validate('string', message: 'El contenido del nombre debe ser una cadena de texto')]
     public $name;
     #[Validate('nullable|string')]
     public $description;
-    #[Validate('required', message: 'Favor de ingresar el nombre del permiso')]
-    #[Validate('min:2', message: 'La longitud mínima del nombre es de 2 caracteres')]
-    #[Validate('max:255', message: 'La longitud máxima del nombre es de 255 caracteres')]
-    #[Validate('string', message: 'El contenido del nombre debe ser una cadena de texto')]
-    public $guard_name;
 
     public Role $role;
 
@@ -29,18 +24,21 @@ new class extends Component
 
     public $selectedPermissions = [];
 
+    public $mensaje = '';
+
     public function mount(?int $id = null)
     {
+        if (! auth()->user()->can('admin.roles.editar')) {
+            abort(403);
+        }
+
         if( $id ){
             $this->rol = Role::findOrFail($id);
             $this->name = $this->rol->name;
             $this->description = $this->rol->description;
-            $this->guard_name = $this->rol->guard_name;
         }
 
         $this->permissions = Permission::orderBy('module')->orderBy('name')->get();
-
-        //dd($rol);
 
         if( $id ){
             $this->selectedPermissions = $this->rol->permissions->pluck('name')->toArray();
@@ -51,24 +49,23 @@ new class extends Component
     {
         if($this->rol){
             $this->rol->update($this->validate());
-            $this->dispatch('rol-actualizado');
-            // $this->dispatch('rol-actualizado', type: 'success', message: 'Rol actualizado correctamente');
+            $mensaje = 'Rol actualizado correctamente';
+
         }else{
             Role::create([
                 'name' => $this->name,
                 'description' => $this->description,
-                'guard_name' => $this->guard_name,
+                'guard_name' => 'web',
             ]);
-
-            $this->dispatch('rol-actualizado', type: 'success', message: 'Rol creado correctamente');
+            $mensaje = 'Rol creado correctamente';
         }
 
-        //dd($this->selectedPermissions);
-
         // Sincronizar permisos
-        $this->rol->syncPermissions($this->selectedPermissions);
+        if($this->selectedPermissions && $this->selectedPermissions != []){
+            $this->rol->syncPermissions($this->selectedPermissions);
+        }
 
-        session()->flash('success', 'Rol actualizado correctamente');
+        session()->flash('success', $mensaje);
 
         return $this->redirect('/dashboard/roles');
     }
@@ -77,11 +74,6 @@ new class extends Component
     {
         return $this->redirect('/dashboard/roles');
     }
-
-    // public function render()
-    // {
-    //     return view('livewire.roles.edit');
-    // }
 };
 ?>
 
@@ -99,7 +91,6 @@ new class extends Component
         
         <flux:input label="Nombre" type="text" wire:model="name" />
         <flux:textarea label="Descripción" wire:model="description" />
-        <flux:input label="Nombre del Guard" type="text" wire:model="guard_name" />
 
         {{-- Permisos --}}
         <div class="mb-6">
