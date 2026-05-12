@@ -12,6 +12,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::livewire('crear', 'pages::dashboard.usuarios.agregar')->name('usuarios.agregar');
             Route::livewire('editar/{id}', 'pages::dashboard.usuarios.agregar')->name('usuarios.editar');
         });
+        Route::group(['prefix' => 'academicos'], function () {
+            Route::livewire('', 'pages::dashboard.academicos.listado')->name('academicos.listado');
+            Route::livewire('crear', 'pages::dashboard.academicos.agregar')->name('academicos.agregar');
+            Route::livewire('editar/{id}', 'pages::dashboard.academicos.agregar')->name('academicos.editar');
+        });
         Route::group(['prefix' => 'roles'], function () {
             Route::livewire('', 'pages::dashboard.roles.listado')->name('roles.listado');
             Route::livewire('crear', 'pages::dashboard.roles.agregar')->name('roles.agregar');

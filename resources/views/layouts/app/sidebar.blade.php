@@ -20,6 +20,11 @@
                             {{ __('Usuarios') }}
                         </flux:sidebar.item>
                     @endcan
+                    @can('admin.academicos.listar')
+                        <flux:sidebar.item icon="home" :href="route('academicos.listado')" :current="request()->routeIs('academicos.listado')" wire:navigate>
+                            {{ __('Académicos') }}
+                        </flux:sidebar.item>
+                    @endcan
                     @can('admin.roles.listar')
                         <flux:sidebar.item icon="home" :href="route('roles.listado')" :current="request()->routeIs('roles.listado')" wire:navigate>
                             {{ __('Roles') }}

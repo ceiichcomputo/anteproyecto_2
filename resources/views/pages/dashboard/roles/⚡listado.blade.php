@@ -5,14 +5,15 @@ use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\Role;
 use Livewire\Attributes\On;
+use App\Livewire\Traits\WithPermissions;
 
 new class extends Component
 {
+    use WithPermissions;
+
     public function mount()
     {
-        if (! auth()->user()->can('admin.roles.listar')) {
-            abort(403);
-        }
+        $this->checkPermission('admin.roles.listar');
     }
 
     use WithPagination;
