@@ -2,7 +2,7 @@
 
 use Livewire\Component;
 use Livewire\Attributes\Validate;
-use App\Models\CatRubro;
+use App\Models\CatSubcategoria;
 
 new class extends Component
 {
@@ -15,6 +15,7 @@ new class extends Component
     public $descripcion;
 
     public $rubro;
+    
     public $mensaje = '';
 
 
@@ -29,35 +30,35 @@ new class extends Component
                 'usuario_mod' => auth()->id(),
                 'updated_at' => now()
             ]);
-            $this->mensaje = 'Rubro actualizado correctamente';
+            $this->mensaje = 'Subcategoría actualizada correctamente';
         }else{
-            CatRubro::create([
+            CatSubcategoria::create([
                 'titulo' => $this->titulo,
                 'descripcion' => $this->descripcion,
                 'usuario_mod' => auth()->id(),
                 'updated_at' => now()
             ]);
-            $this->mensaje = 'Rubro creado correctamente';
+            $this->mensaje = 'Subcategoría creada correctamente';
         }
 
         session()->flash('success', $this->mensaje);
  
-        return $this->redirect('/dashboard/rubro');
+        return $this->redirect('/dashboard/subcategorias');
 
         // dd($this->titulo);
     }
 
     function mount(?int $id = null){
         if($id){
-            $this->rubro = CatRubro::findOrFail($id);
-            $this->titulo = $this->rubro->titulo;
-            $this->descripcion = $this->rubro->descripcion;
+            $this->subcategoria = CatSubcategoria::findOrFail($id);
+            $this->titulo = $this->subcategoria->titulo;
+            $this->descripcion = $this->subcategoria->descripcion;
         }
     }
 
     public function regresar()
     {
-        return $this->redirect('/dashboard/rubro');
+        return $this->redirect('/dashboard/subcategorias');
     }
 };
 ?>
@@ -66,7 +67,7 @@ new class extends Component
 
 <div>
     <div class="relative mb-6 w-full">
-        <flux:heading size="xl" level="1">{{ __('Rubros') }}</flux:heading>
+        <flux:heading size="xl" level="1">{{ __('Subcategorias') }}</flux:heading>
         <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
         <flux:button type="button" wire:click="regresar" wire:confirm="Se perderán todos los cambios, ¿Deseas continuar?">Regresar</flux:button>
         <flux:separator variant="subtle" />

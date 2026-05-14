@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('categoria', 255);
             $table->text('descripcion')->nullable();
             $table->unsignedBigInteger('usuario_ins');
-            $table->unsignedBigInteger('usuario_mod');
-            $table->unsignedBigInteger('usuario_del');
+            $table->unsignedBigInteger('usuario_mod')->nullable();;
+            $table->unsignedBigInteger('usuario_del')->nullable();;
             $table->softDeletes();
             $table->timestamps();
 

@@ -4,6 +4,7 @@ use Livewire\Component;
 use Livewire\Attributes\Validate;
 use App\Models\User;
 use App\Models\UsersDetalle;
+use App\Models\CatNombramiento;
 
 new class extends Component
 {
@@ -28,6 +29,10 @@ new class extends Component
     public $users = [];
 
     public $selectedUser;
+    
+    public $nombramientos = [];
+
+    public $selectedNombramiento;
 
 
     function submit() {
@@ -39,6 +44,7 @@ new class extends Component
 
                 if($this->academico){
                     $this->academico->id_usuario = $this->id_usuario;
+                    $this->academico->id_nombramiento = $this->selectedNombramiento;
                     $this->academico->update($this->validate());
                     $this->mensaje = 'Académico actualizado correctamente';
                 }else{
@@ -47,6 +53,7 @@ new class extends Component
                         'apellido_paterno' => $this->apellido_paterno,
                         'nombres' => $this->nombres,
                         'apellido_materno' => $this->apellido_materno,
+                        'id_nombramiento' => $this->selectedNombramiento,
                     ]);
                     $this->mensaje = 'Académico creado correctamente';
                 }
@@ -85,8 +92,15 @@ new class extends Component
 
         if( $id ){
             $this->selectedUser = $this->academico->id_usuario;
+
+            // Nombramiento seleccionado
+            $this->selectedNombramiento = $this->academico->id_nombramiento;
+
         }
         $this->users = User::orderBy('name')->get();
+        
+        // Nombramientos
+        $this->nombramientos = CatNombramiento::orderBy('nombramiento')->get();
     }
 
     public function regresar()
@@ -118,6 +132,21 @@ new class extends Component
         <flux:input label="Apellido Materno" type="text" wire:model="apellido_materno" />
         <flux:input label="Nombres" type="text" wire:model="nombres" />
         
+        <select
+        wire:model="selectedNombramiento"
+        class="w-full border rounded px-3 py-2"
+    >
+        <option value="">
+            Seleccione un nombramiento
+        </option>
+
+        @foreach($nombramientos as $nombramiento)
+            <option value="{{ $nombramiento->id }}">
+                {{ $nombramiento->nombramiento }}
+            </option>
+        @endforeach
+
+    </select>
 
         {{-- Usuarios --}}
         <div class="mb-6">

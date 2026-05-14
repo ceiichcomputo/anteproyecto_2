@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use Livewire\Attributes\Validate;
+use App\Models\CatCategoria;
 use App\Models\CatRubro;
 
 new class extends Component
@@ -10,11 +11,14 @@ new class extends Component
     #[Validate('min:2', message: 'La longitud mínima del título es de 2 caracteres')]
     #[Validate('max:255', message: 'La longitud máxima del título es de 255 caracteres')]
     #[Validate('string', message: 'El contenido del título debe ser una cadena de texto')]
-    public $titulo;
+    public $categoria;
     #[Validate('nullable|string')]
     public $descripcion;
 
     public $rubro;
+
+    public $objCategoria;
+
     public $mensaje = '';
 
 
@@ -22,42 +26,47 @@ new class extends Component
 
         $this->validate();
 
-        if($this->rubro){
-            $this->rubro->update([
-                'titulo' => $this->titulo,
+        if($this->objCategoria){
+            $this->objCategoria->update([
+                'id_rubro' => $this->rubro->id,
+                'categoria' => $this->categoria,
                 'descripcion' => $this->descripcion,
                 'usuario_mod' => auth()->id(),
                 'updated_at' => now()
             ]);
-            $this->mensaje = 'Rubro actualizado correctamente';
+            $this->mensaje = 'Categoría actualizada correctamente';
         }else{
-            CatRubro::create([
-                'titulo' => $this->titulo,
+            CatCategoria::create([
+                'id_rubro' => $this->rubro->id,
+                'categoria' => $this->categoria,
                 'descripcion' => $this->descripcion,
-                'usuario_mod' => auth()->id(),
+                'usuario_ins' => auth()->id(),
                 'updated_at' => now()
             ]);
-            $this->mensaje = 'Rubro creado correctamente';
+            $this->mensaje = 'Categoría creada correctamente';
         }
 
         session()->flash('success', $this->mensaje);
  
-        return $this->redirect('/dashboard/rubro');
-
-        // dd($this->titulo);
+        return $this->redirect('/dashboard/categorias/rubro/' . $this->rubro->id);
     }
 
-    function mount(?int $id = null){
+    function mount(?int $rubro_id = null, ?int $id = null){
+
+        if($rubro_id){
+            $this->rubro = CatRubro::findOrFail($rubro_id);
+        }
+
         if($id){
-            $this->rubro = CatRubro::findOrFail($id);
-            $this->titulo = $this->rubro->titulo;
-            $this->descripcion = $this->rubro->descripcion;
+            $this->objCategoria = CatCategoria::findOrFail($id);
+            $this->categoria = $this->objCategoria->categoria;
+            $this->descripcion = $this->objCategoria->descripcion;
         }
     }
 
     public function regresar()
     {
-        return $this->redirect('/dashboard/rubro');
+        return $this->redirect('/dashboard/categorias/rubro/' . $this->rubro->id);
     }
 };
 ?>
@@ -66,7 +75,7 @@ new class extends Component
 
 <div>
     <div class="relative mb-6 w-full">
-        <flux:heading size="xl" level="1">{{ __('Rubros') }}</flux:heading>
+        <flux:heading size="xl" level="1">{{ __('Rubro: ' . $this->rubro->titulo) }}</flux:heading>
         <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
         <flux:button type="button" wire:click="regresar" wire:confirm="Se perderán todos los cambios, ¿Deseas continuar?">Regresar</flux:button>
         <flux:separator variant="subtle" />
@@ -79,7 +88,7 @@ new class extends Component
         </div>
     @endif
     <form wire:submit.prevent="submit" class="my-6 w-full space-y-6">
-        <flux:input label="Título" type="text" wire:model="titulo" />
+        <flux:input label="Categoría" type="text" wire:model="categoria" />
         <flux:textarea label="Descripción" wire:model="descripcion" />
         <flux:button variant="primary" type="submit">Guardar</flux:button>
     </form>

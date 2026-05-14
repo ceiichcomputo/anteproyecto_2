@@ -7,17 +7,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['titulo','descripcion','imagen','activo','usuario_mod'])]
-class CatRubro extends Model
+#[Fillable(['nombramiento'])]
+class CatNombramiento extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    public function categorias()
+    public function userDetalle()
     {
-        return $this->hasMany(
-            CatCategoria::class,
-            'id_rubro'
+        return $this->hasOne(
+            UsersDetalle::class,
+            'id_nombramiento'
         );
     }
 }
+

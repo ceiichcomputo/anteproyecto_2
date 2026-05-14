@@ -42,7 +42,7 @@ new class extends Component
 ?>
 <div>
     <div class="relative mb-6 w-full">
-        <flux:heading size="xl" level="1">{{ __('Acádemicos') }}</flux:heading>
+        <flux:heading size="xl" level="1">{{ __('Académicos') }}</flux:heading>
         <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
         <flux:button type="button" wire:click="agregar">Agregar Académico</flux:button>
         <flux:separator variant="subtle" />
@@ -81,7 +81,7 @@ new class extends Component
                     <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
                     <flux:table.cell class="whitespace-normal">{{ $item->user->name }}</flux:table.cell>
                     <flux:table.cell class="whitespace-normal">{{ $item->nombres }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->id_nombramiento }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal">{{ $item->nombramiento->nombramiento }}</flux:table.cell>
                     <flux:table.cell class="whitespace-normal"><a href="{{ route('academicos.editar', $item->id) }}" 
                         class="btn btn-sm btn-primary">Editar</a>
                     </flux:table.cell>

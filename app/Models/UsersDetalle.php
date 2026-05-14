@@ -18,4 +18,12 @@ class UsersDetalle extends Model
             'id_usuario'
         );
     }
+    
+    public function nombramiento()
+    {
+        return $this->belongsTo(
+            CatNombramiento::class,
+            'id_nombramiento'
+        );    
+    }
 }

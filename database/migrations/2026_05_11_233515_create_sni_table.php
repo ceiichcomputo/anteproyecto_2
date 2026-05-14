@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cat_sni', function (Blueprint $table) {
+        Schema::create('cat_snis', function (Blueprint $table) {
             $table->id();
             $table->string('sni', 255);
             $table->softDeletes();
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cat_sni');
+        Schema::dropIfExists('cat_snis');
     }
 };

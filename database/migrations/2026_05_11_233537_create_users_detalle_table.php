@@ -26,11 +26,11 @@ return new class extends Migration
 
 
             $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('id_nombramiento')->references('id')->on('cat_nombramiento')->onDelete('cascade');
-            $table->foreign('id_sni')->references('id')->on('cat_sni')->onDelete('cascade');
-            $table->foreign('id_pride')->references('id')->on('cat_pride')->onDelete('cascade');
-            $table->foreign('id_area_investigacion')->references('id')->on('cat_area_investigacion')->onDelete('cascade');
-            $table->foreign('id_programa_investigacion')->references('id')->on('cat_programa_investigacion')->onDelete('cascade');
+            $table->foreign('id_nombramiento')->references('id')->on('cat_nombramientos')->onDelete('cascade');
+            $table->foreign('id_sni')->references('id')->on('cat_snis')->onDelete('cascade');
+            $table->foreign('id_pride')->references('id')->on('cat_prides')->onDelete('cascade');
+            $table->foreign('id_area_investigacion')->references('id')->on('cat_area_investigaciones')->onDelete('cascade');
+            $table->foreign('id_programa_investigacion')->references('id')->on('cat_programa_investigaciones')->onDelete('cascade');
         });
     }
 
