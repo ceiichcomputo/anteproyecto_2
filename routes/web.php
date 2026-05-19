@@ -33,15 +33,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::livewire('editar/{id}', 'pages::dashboard.rubro.save')->name('rubro.edit');
         });
         Route::group(['prefix' => 'categorias'], function () {
-            Route::livewire('', 'pages::dashboard.categorias.listado')->name('categorias.listado');
             Route::livewire('rubro/{rubro_id}', 'pages::dashboard.categorias.rubrolist')->name('categorias.rubrolist');
             Route::livewire('crear/{rubro_id}', 'pages::dashboard.categorias.agregar')->name('categorias.agregar');
             Route::livewire('editar/{rubro_id}/{id}', 'pages::dashboard.categorias.agregar')->name('categorias.editar');
         });
         Route::group(['prefix' => 'subcategorias'], function () {
-            Route::livewire('', 'pages::dashboard.subcategorias.listado')->name('subcategorias.listado');
-            Route::livewire('crear', 'pages::dashboard.subcategorias.agregar')->name('subcategorias.agregar');
-            Route::livewire('editar/{id}', 'pages::dashboard.subcategorias.agregar')->name('subcategorias.editar');
+            Route::livewire('categorias/{categoria_id}', 'pages::dashboard.subcategorias.listado')->name('subcategorias.listado');
+            Route::livewire('crear/{categoria_id}', 'pages::dashboard.subcategorias.agregar')->name('subcategorias.agregar');
+            Route::livewire('editar/{categoria_id}/{id}', 'pages::dashboard.subcategorias.agregar')->name('subcategorias.editar');
         });
     });
 

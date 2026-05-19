@@ -21,8 +21,8 @@ return new class extends Migration
             $table->boolean('requiere_comentarios')->default(false);
             $table->double('monto_estimado', 10, 2);
             $table->unsignedBigInteger('usuario_ins');
-            $table->unsignedBigInteger('usuario_mod');
-            $table->unsignedBigInteger('usuario_del');
+            $table->unsignedBigInteger('usuario_mod')->nullable();
+            $table->unsignedBigInteger('usuario_del')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

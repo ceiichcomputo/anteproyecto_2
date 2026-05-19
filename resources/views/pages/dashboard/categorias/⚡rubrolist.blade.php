@@ -22,8 +22,6 @@ new class extends Component
         if($rubro_id){
             $this->rubro = CatRubro::findOrFail($rubro_id);
             $this->titulo = $this->rubro->titulo;
-
-            //$this->categorias = CatCategoria::where('id_rubro', 'equals', $this->rubro->id )->simplepaginate(10); --- IGNORE ---
         }
     }
     
@@ -52,8 +50,21 @@ new class extends Component
     public function delete($id)
     {
         $categoria = CatCategoria::findOrFail($id);
+        $categoria->update([
+            'usuario_del' => auth()->id()
+        ]);
         $categoria->delete();
         session()->flash('success', 'Categoría eliminada correctamente');
+    }
+    
+    public function editar($rubro_id, $id)
+    {
+        return $this->redirect('/dashboard/categorias/editar/' . $rubro_id . '/' . $id);
+    }
+
+    public function verSubcategoria($categoria_id)
+    {
+        return $this->redirect('/dashboard/subcategorias/categorias/' . $categoria_id);
     }
 
     public function agregar()
@@ -108,8 +119,19 @@ new class extends Component
                     <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
                     <flux:table.cell class="whitespace-nowrap">{{ $item->categoria }}</flux:table.cell>
                     <flux:table.cell class="whitespace-normal">{{ $item->descripcion }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap"><a href="{{ route('categorias.editar', ['rubro_id' => $this->rubro->id, 'id' => $item->id]) }}" 
-                        class="btn btn-sm btn-primary">Editar</a>
+                    <flux:table.cell class="whitespace-nowrap">
+                        <button
+                            wire:click="editar({{ $this->rubro->id }}, {{ $item->id }})"
+                            class="bg-blue-500 text-white px-3 py-1 rounded"
+                        >
+                            Editar
+                        </button>
+                        <button
+                            wire:click="verSubcategoria({{ $item->id }})"
+                            class="bg-blue-500 text-white px-3 py-1 rounded"
+                        >
+                            Subcategorías
+                        </button>
                         <button
                             wire:click="delete({{ $item->id }})"
                             wire:confirm="¿Deseas eliminar esta categoria?"

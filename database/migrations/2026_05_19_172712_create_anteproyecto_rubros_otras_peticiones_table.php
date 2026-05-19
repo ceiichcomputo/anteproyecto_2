@@ -11,19 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cat_categorias', function (Blueprint $table) {
+        Schema::create('anteproyecto_rubros_otr_pets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_rubro');
-            $table->string('categoria', 255);
-            $table->text('descripcion')->nullable();
-            $table->unsignedBigInteger('usuario_ins');
-            $table->unsignedBigInteger('usuario_mod')->nullable();
-            $table->unsignedBigInteger('usuario_del')->nullable();
+            $table->unsignedBigInteger('id_anteproyecto_rubros');
+            $table->text('peticion');
+            $table->unsignedBigInteger('usuario_mod');
+            $table->unsignedBigInteger('usuario_del');
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('id_rubro')->references('id')->on('cat_rubros')->onDelete('cascade');
-            $table->foreign('usuario_ins')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_anteproyecto_rubros')->references('id')->on('t_anteproyectos_rubros')->onDelete('cascade');
             $table->foreign('usuario_mod')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('usuario_del')->references('id')->on('users')->onDelete('cascade');
         });
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cat_categorias');
+        Schema::dropIfExists('anteproyecto_rubros_otr_pets');
     }
 };

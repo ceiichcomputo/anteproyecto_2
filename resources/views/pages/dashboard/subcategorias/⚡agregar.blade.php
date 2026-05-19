@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use Livewire\Attributes\Validate;
+use App\Models\CatCategoria;
 use App\Models\CatSubcategoria;
 
 new class extends Component
@@ -10,12 +11,27 @@ new class extends Component
     #[Validate('min:2', message: 'La longitud mínima del título es de 2 caracteres')]
     #[Validate('max:255', message: 'La longitud máxima del título es de 255 caracteres')]
     #[Validate('string', message: 'El contenido del título debe ser una cadena de texto')]
-    public $titulo;
+    public $subcategoria;
     #[Validate('nullable|string')]
     public $descripcion;
+    #[Validate('boolean')]
+    public $mostrar_monto_estimado = false;
+    #[Validate('boolean')]
+    public $modificar_monto_estimado = false;
+    #[Validate('boolean')]
+    public $requiere_comentarios = false;
 
-    public $rubro;
-    
+    #[Validate('required', message: 'Favor de ingresar el monto estimado')]
+    #[Validate('gt:0', message: 'El monto estimado debe ser mayor a $0')]
+    public $monto_estimado = 0;
+
+
+
+
+    public $categoria;
+
+    public $objSubcategoria;
+
     public $mensaje = '';
 
 
@@ -23,19 +39,29 @@ new class extends Component
 
         $this->validate();
 
-        if($this->rubro){
-            $this->rubro->update([
-                'titulo' => $this->titulo,
+        if($this->objSubcategoria){
+            $this->objSubcategoria->update([
+                'id_categoria' => $this->categoria->id,
+                'subcategoria' => $this->subcategoria,
                 'descripcion' => $this->descripcion,
+                'mostrar_monto_estimado' => $this->mostrar_monto_estimado,
+                'modificar_monto_estimado' => $this->modificar_monto_estimado,
+                'requiere_comentarios' => $this->requiere_comentarios,
+                'monto_estimado' => $this->monto_estimado,
                 'usuario_mod' => auth()->id(),
                 'updated_at' => now()
             ]);
             $this->mensaje = 'Subcategoría actualizada correctamente';
         }else{
             CatSubcategoria::create([
-                'titulo' => $this->titulo,
+                'id_categoria' => $this->categoria->id,
+                'subcategoria' => $this->subcategoria,
                 'descripcion' => $this->descripcion,
-                'usuario_mod' => auth()->id(),
+                'mostrar_monto_estimado' => $this->mostrar_monto_estimado,
+                'modificar_monto_estimado' => $this->modificar_monto_estimado,
+                'requiere_comentarios' => $this->requiere_comentarios,
+                'monto_estimado' => $this->monto_estimado,
+                'usuario_ins' => auth()->id(),
                 'updated_at' => now()
             ]);
             $this->mensaje = 'Subcategoría creada correctamente';
@@ -43,22 +69,29 @@ new class extends Component
 
         session()->flash('success', $this->mensaje);
  
-        return $this->redirect('/dashboard/subcategorias');
-
-        // dd($this->titulo);
+        return $this->redirect('/dashboard/subcategorias/categorias/' . $this->categoria->id);
     }
 
-    function mount(?int $id = null){
+    function mount(?int $categoria_id = null, ?int $id = null){
+
+        if($categoria_id){
+            $this->categoria = CatCategoria::findOrFail($categoria_id);
+        }
+
         if($id){
-            $this->subcategoria = CatSubcategoria::findOrFail($id);
-            $this->titulo = $this->subcategoria->titulo;
-            $this->descripcion = $this->subcategoria->descripcion;
+            $this->objSubcategoria = CatSubcategoria::findOrFail($id);
+            $this->subcategoria = $this->objSubcategoria->subcategoria;
+            $this->descripcion = $this->objSubcategoria->descripcion;
+            $this->mostrar_monto_estimado = $this->objSubcategoria->mostrar_monto_estimado;
+            $this->modificar_monto_estimado = $this->objSubcategoria->modificar_monto_estimado;
+            $this->requiere_comentarios = $this->objSubcategoria->requiere_comentarios;
+            $this->monto_estimado = $this->objSubcategoria->monto_estimado;
         }
     }
 
     public function regresar()
     {
-        return $this->redirect('/dashboard/subcategorias');
+        return $this->redirect('/dashboard/subcategorias/categorias/' . $this->categoria->id);
     }
 };
 ?>
@@ -67,7 +100,7 @@ new class extends Component
 
 <div>
     <div class="relative mb-6 w-full">
-        <flux:heading size="xl" level="1">{{ __('Subcategorias') }}</flux:heading>
+        <flux:heading size="xl" level="1">{{ __('Categoría: ' . $this->categoria->categoria) }}</flux:heading>
         <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
         <flux:button type="button" wire:click="regresar" wire:confirm="Se perderán todos los cambios, ¿Deseas continuar?">Regresar</flux:button>
         <flux:separator variant="subtle" />
@@ -80,8 +113,12 @@ new class extends Component
         </div>
     @endif
     <form wire:submit.prevent="submit" class="my-6 w-full space-y-6">
-        <flux:input label="Título" type="text" wire:model="titulo" />
+        <flux:input label="Subcategoría" type="text" wire:model="subcategoria" />
         <flux:textarea label="Descripción" wire:model="descripcion" />
+        <flux:checkbox label="Mostrar monto estimado" wire:model="mostrar_monto_estimado" />
+        <flux:checkbox label="Modificar monto estimado" wire:model="modificar_monto_estimado" />
+        <flux:checkbox label="Requiere comentarios" wire:model="requiere_comentarios" />
+        <flux:input label="Monto estimado" step="any" type="number" wire:model="monto_estimado" />
         <flux:button variant="primary" type="submit">Guardar</flux:button>
     </form>
 </div>

@@ -32,10 +32,12 @@ new class extends Component
         $rubro->delete();
         session()->flash('success', 'Rubro eliminado correctamente');
     }
+    
     public function editar($id)
     {
         return $this->redirect('/dashboard/rubro/editar/' . $id);
     }
+
     public function agregarCategoria($rubro_id)
     {
         return $this->redirect('/dashboard/categorias/rubro/' . $rubro_id);
