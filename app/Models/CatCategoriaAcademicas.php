@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 
 #[Fillable(['categoria_academica','usuario_ins'])]
-class CatCategoriasAcademicas extends Model
+class CatCategoriaAcademicas extends Model
 {
     use HasFactory;
 }

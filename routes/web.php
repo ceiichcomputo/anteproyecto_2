@@ -42,6 +42,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::livewire('crear/{categoria_id}', 'pages::dashboard.subcategorias.agregar')->name('subcategorias.agregar');
             Route::livewire('editar/{categoria_id}/{id}', 'pages::dashboard.subcategorias.agregar')->name('subcategorias.editar');
         });
+        Route::group(['prefix' => 'cat_academicas'], function () {
+            Route::livewire('', 'pages::dashboard.cat_academicas.listado')->name('cat_academicas.listado');
+            Route::livewire('crear', 'pages::dashboard.cat_academicas.agregar')->name('cat_academicas.agregar');
+            Route::livewire('editar/{id}', 'pages::dashboard.cat_academicas.agregar')->name('cat_academicas.editar');
+        });
+        Route::group(['prefix' => 'tipo_financiamientos'], function () {
+            Route::livewire('', 'pages::dashboard.tipo_financiamientos.listado')->name('tipo_financiamientos.listado');
+            Route::livewire('crear', 'pages::dashboard.tipo_financiamientos.agregar')->name('tipo_financiamientos.agregar');
+            Route::livewire('editar/{id}', 'pages::dashboard.tipo_financiamientos.agregar')->name('tipo_financiamientos.editar');
+        });
+        Route::group(['prefix' => 'tipo_solicitudes'], function () {
+            Route::livewire('', 'pages::dashboard.tipo_solicitudes.listado')->name('tipo_solicitudes.listado');
+            Route::livewire('crear', 'pages::dashboard.tipo_solicitudes.agregar')->name('tipo_solicitudes.agregar');
+            Route::livewire('editar/{id}', 'pages::dashboard.tipo_solicitudes.agregar')->name('tipo_solicitudes.editar');
+        });
     });
 
 });

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 
 #[Fillable(['tipo_solicitud','usuario_ins'])]
-class CatTipoSolicitud extends Model
+class CatTipoSolicitudes extends Model
 {
     use HasFactory;
 }
