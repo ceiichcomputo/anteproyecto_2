@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('anteproyecto_rubros_otr_pets', function (Blueprint $table) {
+        Schema::create('t_anteproyectos_rubros_otr_pets', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_anteproyecto_rubros');
             $table->text('peticion');
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('anteproyecto_rubros_otr_pets');
+        Schema::dropIfExists('t_anteproyectos_rubros_otr_pets');
     }
 };
