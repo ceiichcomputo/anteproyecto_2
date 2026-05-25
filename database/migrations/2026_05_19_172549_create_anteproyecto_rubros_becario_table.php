@@ -18,8 +18,8 @@ return new class extends Migration
             $table->text('nombre_becario');
             $table->date('fecha_inicio_becario');
             $table->date('fecha_fin_becario');
-            $table->unsignedBigInteger('usuario_mod');
-            $table->unsignedBigInteger('usuario_del');
+            $table->unsignedBigInteger('usuario_mod')->nullable();
+            $table->unsignedBigInteger('usuario_del')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

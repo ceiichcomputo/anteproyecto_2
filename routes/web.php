@@ -57,6 +57,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::livewire('crear', 'pages::dashboard.tipo_solicitudes.agregar')->name('tipo_solicitudes.agregar');
             Route::livewire('editar/{id}', 'pages::dashboard.tipo_solicitudes.agregar')->name('tipo_solicitudes.editar');
         });
+        Route::group(['prefix' => 'anteproyecto'], function () {
+            Route::livewire('', 'pages::dashboard.anteproyecto.listado')->name('anteproyecto.listado');
+            Route::livewire('crear', 'pages::dashboard.anteproyecto.agregar')->name('anteproyecto.agregar');
+            Route::livewire('editar/{id}', 'pages::dashboard.anteproyecto.agregar')->name('anteproyecto.editar');
+            Route::livewire('listado_rubro/{anteproyecto_id}', 'pages::dashboard.anteproyecto.listado_rubro')->name('anteproyecto.listado_rubro');
+            Route::livewire('crear_rubro/{anteproyecto_id}', 'pages::dashboard.anteproyecto.agregar_rubro')->name('anteproyecto.agregar_rubro');
+            Route::livewire('editar_rubro/{rubro_id}', 'pages::dashboard.anteproyecto.agregar_rubro')->name('anteproyecto.editar_rubro');
+        });
     });
 
 });

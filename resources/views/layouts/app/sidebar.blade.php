@@ -40,6 +40,11 @@
                             {{ __('Rubro') }}
                         </flux:sidebar.item>
                     @endcan
+                    @can('anteproyecto.listar')
+                        <flux:sidebar.item icon="home" :href="route('anteproyecto.listado')" :current="request()->routeIs('anteproyecto.listado')" wire:navigate>
+                            {{ __('Anteproyectos') }}
+                        </flux:sidebar.item>
+                    @endcan
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
