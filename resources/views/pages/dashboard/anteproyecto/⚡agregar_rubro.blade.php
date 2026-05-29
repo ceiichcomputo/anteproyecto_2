@@ -7,10 +7,11 @@ use Livewire\Attributes\Validate;
 use App\Models\TAnteproyectos;
 use App\Models\CatEjercicio;
 use App\Models\TAnteproyectosRubro;
-use App\Models\TAnteproyectosRubrosBecarios;
 use App\Models\CatRubro;
 use App\Models\CatCategoria;
 use App\Models\CatSubcategoria;
+use App\Models\TAnteproyectosRubrosBecarios;
+use App\Models\TAnteproyectosRubrosComputos;
 
 new class extends Component
 {
@@ -36,11 +37,12 @@ new class extends Component
 
     public $modificar_monto_estimado = false;
 
-    public function mount(?int $anteproyecto_id = null)
+    public function mount(?int $anteproyecto_id = null, ?int $rubro_id = null)
     {
         $this->checkPermission('anteproyecto.listar');
 
         if($anteproyecto_id){
+
             $this->objAnteproyecto = TAnteproyectos::findOrFail($anteproyecto_id);
             $this->ejercicio = $this->objAnteproyecto->ejercicio->ejercicio;
 
@@ -54,6 +56,67 @@ new class extends Component
             ///BAMS TODO
             ///Si ya existe un rubro, buscar la subcategoría seleccionada y cargar su monto estimado
             ///A partir de la subcategoría, seleccionar la categoria de la lista.
+            if($rubro_id){
+                $this->objAnteproyectoRubro = TAnteproyectosRubro::findOrFail($rubro_id);
+                $this->selectedSubCategoria = $this->objAnteproyectoRubro->id_cat_subcategoria;
+                $this->monto_estimado = $this->objAnteproyectoRubro->monto_estimado;
+                $this->modificar_monto_estimado = $this->objAnteproyectoRubro->modificar_monto_estimado;
+
+                $categoria = CatCategoria::findOrFail($this->objAnteproyectoRubro->subcategoria->id_categoria);
+                $this->selectedCategoria = $categoria->id;
+
+                $rubro = CatRubro::findOrFail($categoria->id_rubro);
+                $this->selectedRubro = $rubro->id;
+
+                // Cargar categorías y subcategorías para que se muestren en los select
+                $this->catCategorias = CatCategoria::where('id_rubro', $rubro->id)->orderBy('categoria')->get();
+
+                
+                // Consultar subcategorías
+                $this->catSubCategorias =
+                    CatSubcategoria::where(
+                        'id_categoria',
+                        $this->selectedCategoria
+                    )
+                    ->orderBy('subcategoria')
+                    ->get();
+
+
+                $this->objSubcategoriaAEditar = CatSubcategoria::findOrFail($this->selectedSubCategoria);
+
+
+                try{
+
+                    switch ($this->selectedRubro) {
+
+                        case '7': //Becarios
+                
+                            $this->obj_ant_rubro_becario = TAnteproyectosRubrosBecarios::where('id_anteproyecto_rubros', $rubro_id)->first();
+                            $this->actividades_a_desarrollar = $this->obj_ant_rubro_becario->actividades_a_desarrollar;
+                            $this->nombre_becario = $this->obj_ant_rubro_becario->nombre_becario;
+                            $this->fecha_inicio = $this->obj_ant_rubro_becario->fecha_inicio_becario;
+                            $this->fecha_final = $this->obj_ant_rubro_becario->fecha_fin_becario;
+                            break;
+                        case '2': //Computo
+                            $this->obj_ant_rubro_computo = TAnteproyectosRubrosComputos::where('id_anteproyecto_rubros', $rubro_id)->first();
+                            $this->justificacion_objeto_comprar = $this->obj_ant_rubro_computo->justificacion_objeto_comprar;
+                            break;  
+
+
+                        }
+                } catch (\Exception $e) {
+                    dd($e->getMessage());
+                    report($e->getMessage());
+
+                    session()->flash(
+                        'error',
+                        'Ocurrió un error al actualizar el Rubro, por favor intenta nuevamente.'
+                    );
+                }
+                
+
+
+            }
 
         }
     }
@@ -129,34 +192,37 @@ new class extends Component
     }
 
     
+        /*
+    |--------------------------------------------------------------------------
+    | General
+    |--------------------------------------------------------------------------
+    */
 
-
-    
-    
+    #[Validate('required', message: 'Favor de ingresar un monto estimado')]
+    #[Validate('numeric', message: 'El monto estimado debe ser un número')]
+    public $monto_estimado = 0;
+   
         /*
     |--------------------------------------------------------------------------
     | Becarios
     |--------------------------------------------------------------------------
     */
-
-    #[Validate('required', message: 'Favor de ingresar las actividades a desarrollar')]
-    #[Validate('min:2', message: 'La longitud mínima de las actividades a desarrollar es de 2 caracteres')]
-    #[Validate('max:255', message: 'La longitud máxima de las actividades a desarrollar es de 255 caracteres')]
-    #[Validate('string', message: 'El contenido de las actividades a desarrollar debe ser una cadena de texto')]
     public $actividades_a_desarrollar;
-    #[Validate('required', message: 'Favor de ingresar un nombre de becario')]
-    #[Validate('min:2', message: 'La longitud mínima del nombre de becario es de 2 caracteres')]
-    #[Validate('max:255', message: 'La longitud máxima del nombre de becario es de 255 caracteres')]
-    #[Validate('string', message: 'El contenido del nombre de becario debe ser una cadena de texto')]
     public $nombre_becario;
-
-    #[Validate('required', message: 'Favor de ingresar una fecha de inicio')]
     public $fecha_inicio;
-    #[Validate('required', message: 'Favor de ingresar una fecha de finalización')]
     public $fecha_final;
-    #[Validate('required', message: 'Favor de ingresar un monto estimado')]
-    #[Validate('numeric', message: 'El monto estimado debe ser un número')]
-    public $monto_estimado = 0;
+
+    public $obj_ant_rubro_becario;
+
+        /*
+    |--------------------------------------------------------------------------
+    | Computo
+    |--------------------------------------------------------------------------
+    */
+
+    public $justificacion_objeto_comprar;
+
+    public $obj_ant_rubro_computo;
 
     /*
     |--------------------------------------------------------------------------
@@ -172,26 +238,41 @@ new class extends Component
 
     public $mensaje = '';
 
+    public $validacion = false;
+
 
     function submit() {
 
-        $this->validate();
-
+        if(!$this->validaciones())
+        return;
+                    
         try{
 
             switch ($this->selectedRubro) {
 
-                case '7':
+                case '7': //Becarios
 
-                    if($this->objSubcategoriaAEditar){
-                        $this->objSubcategoriaAEditar->update([
-                            'id_cat_subcategoria' => $this->selectedSubCategoria,
-                            'devengado' => false,
-                            'monto_estimado' => $this->monto_estimado,
-                            'usuario_mod' => auth()->id(),
-                            'updated_at' => now()
-                        ]);
-                        $this->mensaje = 'Categoría actualizada correctamente';
+
+                    if($this->objAnteproyectoRubro){
+
+                        DB::transaction(function () {
+                            $this->objAnteproyectoRubro->update([
+                                'id_cat_subcategoria' => $this->selectedSubCategoria,
+                                'monto_estimado' => $this->monto_estimado,
+                                'usuario_mod' => auth()->id(),
+                                'updated_at' => now()
+                            ]);
+
+                            $this->obj_ant_rubro_becario->update([
+                                'actividades_a_desarrollar' => $this->actividades_a_desarrollar,
+                                'nombre_becario' => $this->nombre_becario,
+                                'fecha_inicio_becario' => $this->fecha_inicio,
+                                'fecha_fin_becario' => $this->fecha_final
+                            ]);
+
+                            $this->mensaje = 'Rubro de Becarios actualizado correctamente';
+                        });
+
                     }else{
 
                         DB::transaction(function () {
@@ -212,21 +293,52 @@ new class extends Component
                                 'fecha_fin_becario' => $this->fecha_final
                             ]);
 
-
+                            $this->mensaje = 'Rubro de Becarios creado correctamente';
                         });
 
-
-
-                            $this->mensaje = 'Rubro creado correctamente';
-                    }
-
-                    //                            
+                    }                     
 
                     break;
 
-                case 'docencia':
+                case '2': //Computo
+                    if($this->objAnteproyectoRubro){
 
-                    // Guardar docencia
+                        DB::transaction(function () {
+                            $this->objAnteproyectoRubro->update([
+                                'id_cat_subcategoria' => $this->selectedSubCategoria,
+                                'monto_estimado' => $this->monto_estimado,
+                                'usuario_mod' => auth()->id(),
+                                'updated_at' => now()
+                            ]);
+
+                            $this->obj_ant_rubro_computo->update([
+                                'justificacion_objeto_comprar' => $this->justificacion_objeto_comprar,
+                            ]);
+
+                            $this->mensaje = 'Rubro de Computo actualizado correctamente';
+                        });
+
+                    }else{
+
+                        DB::transaction(function () {
+
+                            $this->objAnteproyectoRubro = TAnteproyectosRubro::create([
+                                'id_anteproyecto' => $this->objAnteproyecto->id,
+                                'id_cat_subcategoria' => $this->selectedSubCategoria,
+                                'devengado' => false,
+                                'monto_estimado' => $this->monto_estimado,
+                                'usuario_ins' => auth()->id()
+                            ]);
+
+                            TAnteproyectosRubrosComputos::create([
+                                'id_anteproyecto_rubros' => $this->objAnteproyecto->id,
+                                'justificacion_objeto_comprar' => $this->justificacion_objeto_comprar
+                            ]);
+
+                            $this->mensaje = 'Rubro de Computo creado correctamente';
+                        });
+
+                    }          
 
                     break;
 
@@ -252,24 +364,51 @@ new class extends Component
 
             session()->flash(
                 'error',
-                'Ocurrió un error al actualizar el Académico, por favor intenta nuevamente.'
+                'Ocurrió un error al actualizar el Rubro, por favor intenta nuevamente.'
             );
         }
 
     }
 
-    // function mount(?int $rubro_id = null, ?int $id = null){
+    private function validaciones(){
+        switch ($this->selectedRubro) {
 
-    //     if($rubro_id){
-    //         $this->rubro = CatRubro::findOrFail($rubro_id);
-    //     }
+            case '7': //Becarios
 
-    //     if($id){
-    //         $this->objCategoria = CatCategoria::findOrFail($id);
-    //         $this->categoria = $this->objCategoria->categoria;
-    //         $this->descripcion = $this->objCategoria->descripcion;
-    //     }
-    // }
+                $this->validate([
+                    'actividades_a_desarrollar' =>
+                        'required|string|max:255',
+                    'nombre_becario' =>
+                        'required|string|max:255',
+                    'fecha_inicio' =>
+                        'required|date',
+                    'fecha_final' =>
+                        'required|date'
+                ],[
+                'actividades_a_desarrollar.required' => 'Favor de ingresar las actividades a desarrollar',
+                'actividades_a_desarrollar.max' => 'La longitud máxima de las actividades a desarrollar es de 255 caracteres',
+                'nombre_becario.required' => 'Favor de ingresar el nombre del becario',
+                'nombre_becario.max' => 'La longitud máxima del nombre del becario es de 255 caracteres',
+                'fecha_inicio.required' => 'Favor de ingresar la fecha de inicio',
+                'fecha_final.required' => 'Favor de ingresar la fecha de finalización',
+                ]);
+
+                break;
+                
+            case '2': //Computo
+
+                $this->validate([
+                    'justificacion_objeto_comprar' =>
+                        'required|string|max:255'
+                ],[
+                'justificacion_objeto_comprar.required' => 'Favor de ingresar la justificación del objeto a comprar',
+                'justificacion_objeto_comprar.max' => 'La longitud máxima de la justificación del objeto a comprar es de 255 caracteres',
+                ]);
+
+                break;
+        }
+        return true;
+    }
 
     public function regresar()
     {
@@ -381,7 +520,7 @@ new class extends Component
                     type="submit"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded"
                 >
-                    Guardar Bri
+                    Guardar
                 </button>
             </div>
 

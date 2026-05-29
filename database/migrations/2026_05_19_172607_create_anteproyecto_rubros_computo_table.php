@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('t_anteproyectos_rubros_computos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_anteproyecto_rubros');
-            $table->text('objeto_comprar');
             $table->text('justificacion_objeto_comprar');
-            $table->unsignedBigInteger('usuario_mod');
-            $table->unsignedBigInteger('usuario_del');
+            $table->unsignedBigInteger('usuario_mod')->nullable();
+            $table->unsignedBigInteger('usuario_del')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

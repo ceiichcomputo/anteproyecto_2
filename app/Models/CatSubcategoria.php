@@ -20,4 +20,14 @@ class CatSubcategoria extends Model
             'id_categoria'
         );
     }
+
+
+
+    public function anteproyectos_rubros()
+    {
+        return $this->hasMany(
+            TAnteproyectosRubro::class,
+            'id_cat_subcategoria'
+        );
+    }
 }

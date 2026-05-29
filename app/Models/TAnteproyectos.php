@@ -21,4 +21,12 @@ class TAnteproyectos extends Model
             'id_ejercicio'
         );
     }
+
+    public function anteproyectos_rubros()
+    {
+        return $this->hasMany(
+            TAnteproyectosRubro::class,
+            'id_anteproyecto'
+        );
+    }
 }

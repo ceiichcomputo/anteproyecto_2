@@ -13,4 +13,21 @@ class TAnteproyectosRubro extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+
+    public function anteproyectos()
+    {
+        return $this->belongsTo(
+            TAnteproyectos::class,
+            'id_anteproyecto'
+        );
+    }
+    public function subcategoria()
+    {
+        return $this->belongsTo(
+            CatSubcategoria::class,
+            'id_cat_subcategoria'
+        );
+    }
+
 }

@@ -15,6 +15,7 @@ new class extends Component
 
     public $anteproyecto;
     public $ejercicio;
+    public $anteproyectosRubros = [];
 
     public function mount(?int $anteproyecto_id = null)
     {
@@ -23,6 +24,7 @@ new class extends Component
         if($anteproyecto_id){
             $this->anteproyecto = TAnteproyectos::findOrFail($anteproyecto_id);
             $this->ejercicio = $this->anteproyecto->ejercicio->ejercicio;
+            //$this->anteproyectosRubros = $this->anteproyecto->anteproyectos_rubros;
         }
     }
     
@@ -42,10 +44,11 @@ new class extends Component
     public function rubros()
     {
         if($this->query){
-            return TAnteproyectosRubro::where('rubro', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
+            return TAnteproyectosRubro::with('subcategoria')->where('rubro', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
         }
 
-        return TAnteproyectosRubro::where('id_anteproyecto', $this->anteproyecto->id)->simplepaginate(10); // paginate(10) --- IGNORE ---
+        return TAnteproyectosRubro::with('subcategoria')->where('id_anteproyecto', $this->anteproyecto->id)->simplepaginate(10); // paginate(10) --- IGNORE ---
+        
     }
     
     public function delete($id)
@@ -58,14 +61,9 @@ new class extends Component
         session()->flash('success', 'Rubro eliminado correctamente');
     }
     
-    public function editar($rubro_id, $id)
+    public function editar($rubro_id)
     {
-        return $this->redirect('/dashboard/categorias/editar/' . $rubro_id . '/' . $id);
-    }
-
-    public function verSubcategoria($categoria_id)
-    {
-        return $this->redirect('/dashboard/subcategorias/categorias/' . $categoria_id);
+        return $this->redirect('/dashboard/anteproyecto/editar_rubro/' . $this->anteproyecto->id . '/' . $rubro_id);
     }
 
     public function agregar()
@@ -110,41 +108,41 @@ new class extends Component
         <flux:table.columns>
             <flux:table.column>ID</flux:table.column>
             <flux:table.column>Rubro</flux:table.column>
-            <flux:table.column>Descripción</flux:table.column>
+            <flux:table.column>Monto Estimado</flux:table.column>
             <flux:table.column>Acciones</flux:table.column>
         </flux:table.columns>
 
-        <flux:table.rows>
-            @foreach ($this->rubros as $item)
-                <flux:table.row :key="$item->id">
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->categorias }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->id_cat_subcategoria }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">
-                        <button
-                            wire:click="editar({{ $this->anteproyecto->id }}, {{ $item->id }})"
-                            class="bg-blue-500 text-white px-3 py-1 rounded"
-                        >
-                            Editar
-                        </button>
-                        <button
-                            wire:click="verSubcategoria({{ $item->id }})"
-                            class="bg-blue-500 text-white px-3 py-1 rounded"
-                        >
-                            Subcategorías
-                        </button>
-                        <button
-                            wire:click="delete({{ $item->id }})"
-                            wire:confirm="¿Deseas eliminar esta categoria?"
-                            class="bg-red-500 text-white px-3 py-1 rounded"
-                        >
-                            Eliminar
-                        </button>
+        @if(!$this->rubros)
+            <flux:table.row>
+                <flux:table.cell colspan="4" class="text-center">No se encontraron rubros.</flux:table.cell>
+            </flux:table.row>
+        @else
+            <flux:table.rows>
+                @foreach ($this->rubros as $item)
+                    <flux:table.row :key="$item->id">
+                        <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
+                        <flux:table.cell class="whitespace-nowrap">{{ $item->subcategoria->subcategoria ?? 'N/A' }}</flux:table.cell>
+                        <flux:table.cell class="whitespace-normal">{{ $item->monto_estimado }}</flux:table.cell>
+                        <flux:table.cell class="whitespace-nowrap">
+                            <button
+                                wire:click="editar({{ $item->id }})"
+                                class="bg-blue-500 text-white px-3 py-1 rounded"
+                            >
+                                Editar
+                            </button>
+                            <button
+                                wire:click="delete({{ $item->id }})"
+                                wire:confirm="¿Deseas eliminar este rubro?"
+                                class="bg-red-500 text-white px-3 py-1 rounded"
+                            >
+                                Eliminar
+                            </button>
 
-                    </flux:table.cell>
-                </flux:table.row>
-            @endforeach
-        </flux:table.rows>
+                        </flux:table.cell>
+                    </flux:table.row>
+                @endforeach
+            </flux:table.rows>
+        @endif
     </flux:table> 
     <br>
     {{ $this->rubros->links() }}

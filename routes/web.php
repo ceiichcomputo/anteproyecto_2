@@ -63,7 +63,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::livewire('editar/{id}', 'pages::dashboard.anteproyecto.agregar')->name('anteproyecto.editar');
             Route::livewire('listado_rubro/{anteproyecto_id}', 'pages::dashboard.anteproyecto.listado_rubro')->name('anteproyecto.listado_rubro');
             Route::livewire('crear_rubro/{anteproyecto_id}', 'pages::dashboard.anteproyecto.agregar_rubro')->name('anteproyecto.agregar_rubro');
-            Route::livewire('editar_rubro/{rubro_id}', 'pages::dashboard.anteproyecto.agregar_rubro')->name('anteproyecto.editar_rubro');
+            Route::livewire('editar_rubro/{anteproyecto_id}/{rubro_id}', 'pages::dashboard.anteproyecto.agregar_rubro')->name('anteproyecto.editar_rubro');
         });
     });
 
