@@ -55,5 +55,41 @@ class CatCategoriaSeeder extends Seeder
             'descripcion' => 'Conferencia',
             'usuario_ins' => 1,
         ]);
+        CatCategoria::create([
+            'id_rubro' => '4',
+            'categoria' => 'Financiamiento Externo',
+            'descripcion' => 'Financiamiento Externo',
+            'usuario_ins' => 1,
+        ]);
+        CatCategoria::create([
+            'id_rubro' => '5',
+            'categoria' => 'Boleto de Avión + viáticos 3 días',
+            'descripcion' => 'Boleto de Avión + viáticos 3 días',
+            'usuario_ins' => 1,
+        ]);
+        CatCategoria::create([
+            'id_rubro' => '6',
+            'categoria' => 'Préstamos',
+            'descripcion' => 'Son préstamos',
+            'usuario_ins' => 1,
+        ]);
+        CatCategoria::create([
+            'id_rubro' => '7',
+            'categoria' => 'Promoción de Pride',
+            'descripcion' => 'Promoción de Pride',
+            'usuario_ins' => 1,
+        ]);
+        CatCategoria::create([
+            'id_rubro' => '8',
+            'categoria' => 'Boleto de avión',
+            'descripcion' => 'Boleto de avión',
+            'usuario_ins' => 1,
+        ]);
+        CatCategoria::create([
+            'id_rubro' => '8',
+            'categoria' => 'Boleto de avión + viáticos 3 días',
+            'descripcion' => 'Boleto de avión + viáticos 3 días',
+            'usuario_ins' => 1,
+        ]);
     }
 }

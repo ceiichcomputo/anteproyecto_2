@@ -35,9 +35,12 @@ class RolePermisosSeeder extends Seeder
         Permission::create(['name' => 'anteproyecto.listar', 'module' => 'Anteproyecto', 'description' => 'Es para listar anteproyectos', 'is_active' => true, 'guard_name' => 'web']);
         Permission::create(['name' => 'anteproyecto.editar', 'module' => 'Anteproyecto', 'description' => 'Es para editar anteproyectos', 'is_active' => true, 'guard_name' => 'web']);
 
+        Permission::create(['name' => 'catalogos.categorias.listar', 'module' => 'Catálogos', 'description' => 'Es para listar categorias', 'is_active' => true, 'guard_name' => 'web']);
+        Permission::create(['name' => 'catalogos.categorias.editar', 'module' => 'Catálogos', 'description' => 'Es para editar categorias', 'is_active' => true, 'guard_name' => 'web']);
+
         // 3. Crear roles y asignar permisos
         $roleAdmin = Role::create(['name' => 'Administrador']);
-        $roleAdmin->givePermissionTo(['admin.roles.listar', 'admin.roles.editar', 'admin.usuarios.listar', 'admin.usuarios.editar', 'admin.academicos.listar', 'admin.academicos.editar', 'admin.permisos.listar', 'admin.permisos.editar']);
+        $roleAdmin->givePermissionTo(['admin.roles.listar', 'admin.roles.editar', 'admin.usuarios.listar', 'admin.usuarios.editar', 'admin.academicos.listar', 'admin.academicos.editar', 'admin.permisos.listar', 'admin.permisos.editar', 'catalogos.categorias.listar', 'catalogos.categorias.editar']);
 
         // 3. Crear roles y asignar permisos
         $roleAcademico = Role::create(['name' => 'Académico']);

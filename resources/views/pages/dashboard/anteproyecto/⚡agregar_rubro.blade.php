@@ -10,8 +10,16 @@ use App\Models\TAnteproyectosRubro;
 use App\Models\CatRubro;
 use App\Models\CatCategoria;
 use App\Models\CatSubcategoria;
+use App\Models\CatTipoFinanciamiento;
+use App\Models\CatTipoSolicitudes;
 use App\Models\TAnteproyectosRubrosBecarios;
 use App\Models\TAnteproyectosRubrosComputos;
+use App\Models\TAnteproyectosRubrosEventos;
+use App\Models\TAnteproyectosRubrosFinExts;
+use App\Models\TAnteproyectosRubrosInvitados;
+use App\Models\TAnteproyectosRubrosOtrPets;
+use App\Models\TAnteproyectosRubrosPromos;
+use App\Models\TAnteproyectosRubrosViajes;
 
 new class extends Component
 {
@@ -36,6 +44,7 @@ new class extends Component
     public $objSubcategoriaAEditar = '';
 
     public $modificar_monto_estimado = false;
+    public $cat_tipo_financiamientos = [];
 
     public function mount(?int $anteproyecto_id = null, ?int $rubro_id = null)
     {
@@ -47,6 +56,7 @@ new class extends Component
             $this->ejercicio = $this->objAnteproyecto->ejercicio->ejercicio;
 
 
+            $this->cat_tipo_financiamientos = CatTipoFinanciamiento::orderBy('tipo_financiamiento', 'asc')->get();
             $this->catRubros = CatRubro::orderBy('titulo', 'asc')
                 ->get();
 
@@ -101,6 +111,23 @@ new class extends Component
                             $this->obj_ant_rubro_computo = TAnteproyectosRubrosComputos::where('id_anteproyecto_rubros', $rubro_id)->first();
                             $this->justificacion_objeto_comprar = $this->obj_ant_rubro_computo->justificacion_objeto_comprar;
                             break;  
+                        case '3': //Eventos
+                            $this->obj_ant_rubro_evento = TAnteproyectosRubrosEventos::where('id_anteproyecto_rubros', $rubro_id)->first();
+                            $this->nombre_evento = $this->obj_ant_rubro_evento->nombre_evento;
+                            $this->descripcion_evento = $this->obj_ant_rubro_evento->descripcion_evento;
+                            $this->fecha_inicio_evento = $this->obj_ant_rubro_evento->fecha_inicio_evento;
+                            $this->fecha_fin_evento = $this->obj_ant_rubro_evento->fecha_fin_evento;
+                            break;  
+                        case '4': //Financiamiento externo
+                            $this->obj_ant_rubro_fin_ext = TAnteproyectosRubrosFinExts::where('id_anteproyecto_rubros', $rubro_id)->first();
+                            $this->id_tipo_financiamiento = $this->obj_ant_rubro_fin_ext->id_tipo_financiamiento;
+                            $this->titulo_proyecto = $this->obj_ant_rubro_fin_ext->titulo_proyecto;
+                            $this->nombre_dependencia = $this->obj_ant_rubro_fin_ext->nombre_dependencia;
+                            $this->fecha_inicio_evento = $this->obj_ant_rubro_fin_ext->fecha_inicio_evento;
+                            $this->fecha_fin_evento = $this->obj_ant_rubro_fin_ext->fecha_fin_evento;
+                            $this->selected_tipo_financiamiento = $this->obj_ant_rubro_fin_ext->id_tipo_financiamiento;
+
+                            break; 
 
 
                         }
@@ -201,6 +228,7 @@ new class extends Component
     #[Validate('required', message: 'Favor de ingresar un monto estimado')]
     #[Validate('numeric', message: 'El monto estimado debe ser un número')]
     public $monto_estimado = 0;
+    public $validacion = false;
    
         /*
     |--------------------------------------------------------------------------
@@ -224,21 +252,32 @@ new class extends Component
 
     public $obj_ant_rubro_computo;
 
-    /*
+         /*
     |--------------------------------------------------------------------------
-    | DOCENCIA
+    | Eventos
     |--------------------------------------------------------------------------
     */
+    public $nombre_evento;
+    public $descripcion_evento;
+    public $fecha_inicio_evento;
+    public $fecha_fin_evento;
 
-    public $curso;
+    public $obj_ant_rubro_evento;
 
-    public $horas;
+        /*
+    |--------------------------------------------------------------------------
+    | Financiamiento externo
+    |--------------------------------------------------------------------------
+    */
+    public $id_tipo_financiamiento;
+    public $titulo_proyecto;
+    public $nombre_dependencia;
+    //public $fecha_inicio_evento;
+    //public $fecha_fin_evento;
 
-    public $institucion;
+    public $selected_tipo_financiamiento = '';
+    public $obj_ant_rubro_fin_ext;
 
-    public $mensaje = '';
-
-    public $validacion = false;
 
 
     function submit() {
@@ -340,6 +379,105 @@ new class extends Component
 
                     break;
 
+                case '3': //Eventos
+
+
+                    if($this->objAnteproyectoRubro){
+
+                        DB::transaction(function () {
+                            $this->objAnteproyectoRubro->update([
+                                'id_cat_subcategoria' => $this->selectedSubCategoria,
+                                'monto_estimado' => $this->monto_estimado,
+                                'usuario_mod' => auth()->id()
+                            ]);
+
+                            $this->obj_ant_rubro_evento->update([
+                                'nombre_evento' => $this->nombre_evento,
+                                'descripcion_evento' => $this->descripcion_evento,
+                                'fecha_inicio_evento' => $this->fecha_inicio_evento,
+                                'fecha_fin_evento' => $this->fecha_fin_evento
+                            ]);
+
+                            $this->mensaje = 'Rubro de Eventos actualizado correctamente';
+                        });
+
+                    }else{
+
+                        DB::transaction(function () {
+
+                            $this->objAnteproyectoRubro = TAnteproyectosRubro::create([
+                                'id_anteproyecto' => $this->objAnteproyecto->id,
+                                'id_cat_subcategoria' => $this->selectedSubCategoria,
+                                'devengado' => false,
+                                'monto_estimado' => $this->monto_estimado,
+                                'usuario_ins' => auth()->id()
+                            ]);
+
+                            TAnteproyectosRubrosEventos::create([
+                                'id_anteproyecto_rubros' => $this->objAnteproyectoRubro->id,
+                                'nombre_evento' => $this->nombre_evento,
+                                'descripcion_evento' => $this->descripcion_evento,
+                                'fecha_inicio_evento' => $this->fecha_inicio_evento,
+                                'fecha_fin_evento' => $this->fecha_fin_evento
+                            ]);
+
+                            $this->mensaje = 'Rubro de Eventos creado correctamente';
+                        });
+
+                    }                     
+
+                    break;
+
+                case '4': //Financiamiento externo
+
+                    if($this->objAnteproyectoRubro){
+
+                        DB::transaction(function () {
+                            $this->objAnteproyectoRubro->update([
+                                'id_cat_subcategoria' => $this->selectedSubCategoria,
+                                'monto_estimado' => $this->monto_estimado,
+                                'usuario_mod' => auth()->id()
+                            ]);
+
+                            $this->obj_ant_rubro_fin_ext->update([
+                                'id_tipo_financiamiento' => $this->selected_tipo_financiamiento,
+                                'titulo_proyecto' => $this->titulo_proyecto,
+                                'nombre_dependencia' => $this->nombre_dependencia,
+                                'fecha_inicio_evento' => $this->fecha_inicio_evento,
+                                'fecha_fin_evento' => $this->fecha_fin_evento
+                            ]);
+
+                            $this->mensaje = 'Rubro de Eventos actualizado correctamente';
+                        });
+
+                    }else{
+
+                        DB::transaction(function () {
+
+                            $this->objAnteproyectoRubro = TAnteproyectosRubro::create([
+                                'id_anteproyecto' => $this->objAnteproyecto->id,
+                                'id_cat_subcategoria' => $this->selectedSubCategoria,
+                                'devengado' => false,
+                                'monto_estimado' => $this->monto_estimado,
+                                'usuario_ins' => auth()->id()
+                            ]);
+
+                            TAnteproyectosRubrosFinExts::create([
+                                'id_anteproyecto_rubros' => $this->objAnteproyectoRubro->id,
+                                'id_tipo_financiamiento' => $this->selected_tipo_financiamiento,
+                                'titulo_proyecto' => $this->titulo_proyecto,
+                                'nombre_dependencia' => $this->nombre_dependencia,
+                                'fecha_inicio_evento' => $this->fecha_inicio_evento,
+                                'fecha_fin_evento' => $this->fecha_fin_evento
+                            ]);
+
+                            $this->mensaje = 'Rubro de Financiamiento externo creado correctamente';
+                        });
+
+                    }                     
+
+                    break;
+
                 case 'equipo':
 
                     // Guardar equipo
@@ -374,14 +512,7 @@ new class extends Component
             case '1': //Becarios
 
                 $this->validate([
-                    'actividades_a_desarrollar' =>
-                        'required|string|max:255',
-                    'nombre_becario' =>
-                        'required|string|max:255',
-                    'fecha_inicio' =>
-                        'required|date',
-                    'fecha_final' =>
-                        'required|date'
+                    'actividades_a_desarrollar' => 'required|string|max:255','nombre_becario' => 'required|string|max:255', 'fecha_inicio' => 'required|date', 'fecha_final' => 'required|date'
                 ],[
                 'actividades_a_desarrollar.required' => 'Favor de ingresar las actividades a desarrollar',
                 'actividades_a_desarrollar.max' => 'La longitud máxima de las actividades a desarrollar es de 255 caracteres',
@@ -396,14 +527,39 @@ new class extends Component
             case '2': //Computo
 
                 $this->validate([
-                    'justificacion_objeto_comprar' =>
-                        'required|string|max:255'
+                    'justificacion_objeto_comprar' => 'required|string|max:255'
                 ],[
                 'justificacion_objeto_comprar.required' => 'Favor de ingresar la justificación del objeto a comprar',
                 'justificacion_objeto_comprar.max' => 'La longitud máxima de la justificación del objeto a comprar es de 255 caracteres',
                 ]);
 
                 break;
+                
+            case '3': //Eventos
+
+                $this->validate([
+                    'nombre_evento' => 'required|string', 'descripcion_evento' => 'required|string', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
+                ],[
+                'nombre_evento.required' => 'Favor de ingresar el nombre del evento',
+                'descripcion_evento.required' => 'Favor de ingresar la descripción del evento',
+                'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
+                'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
+                ]);
+                
+            case '4': //Financiamiento externo
+
+                $this->validate([
+                    'selected_tipo_financiamiento' => 'required', 'titulo_proyecto' => 'required|string', 'nombre_dependencia' => 'required|string', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
+                ],[
+                'selected_tipo_financiamiento.required' => 'Favor de seleccionar el tipo de financiamiento',
+                'titulo_proyecto.required' => 'Favor de ingresar el título del proyecto',
+                'nombre_dependencia.required' => 'Favor de ingresar el nombre de la dependencia',
+                'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
+                'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
+                ]);
+
+                break;
+
         }
         return true;
     }
