@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_cat_pregunta');
             $table->unsignedBigInteger('id_cat_respuesta');
             $table->text('comentarios')->nullable();
-            $table->unsignedBigInteger('usuario_mod');
-            $table->unsignedBigInteger('usuario_del');
+            $table->unsignedBigInteger('usuario_mod')->nullable();
+            $table->unsignedBigInteger('usuario_del')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

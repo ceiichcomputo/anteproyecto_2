@@ -89,7 +89,7 @@ new class extends Component
 
                     switch ($this->selectedRubro) {
 
-                        case '7': //Becarios
+                        case '1': //Becarios
                 
                             $this->obj_ant_rubro_becario = TAnteproyectosRubrosBecarios::where('id_anteproyecto_rubros', $rubro_id)->first();
                             $this->actividades_a_desarrollar = $this->obj_ant_rubro_becario->actividades_a_desarrollar;
@@ -250,7 +250,7 @@ new class extends Component
 
             switch ($this->selectedRubro) {
 
-                case '7': //Becarios
+                case '1': //Becarios
 
 
                     if($this->objAnteproyectoRubro){
@@ -259,8 +259,7 @@ new class extends Component
                             $this->objAnteproyectoRubro->update([
                                 'id_cat_subcategoria' => $this->selectedSubCategoria,
                                 'monto_estimado' => $this->monto_estimado,
-                                'usuario_mod' => auth()->id(),
-                                'updated_at' => now()
+                                'usuario_mod' => auth()->id()
                             ]);
 
                             $this->obj_ant_rubro_becario->update([
@@ -307,8 +306,7 @@ new class extends Component
                             $this->objAnteproyectoRubro->update([
                                 'id_cat_subcategoria' => $this->selectedSubCategoria,
                                 'monto_estimado' => $this->monto_estimado,
-                                'usuario_mod' => auth()->id(),
-                                'updated_at' => now()
+                                'usuario_mod' => auth()->id()
                             ]);
 
                             $this->obj_ant_rubro_computo->update([
@@ -323,7 +321,7 @@ new class extends Component
                         DB::transaction(function () {
 
                             $this->objAnteproyectoRubro = TAnteproyectosRubro::create([
-                                'id_anteproyecto' => $this->objAnteproyectoRubro->id,
+                                'id_anteproyecto' => $this->objAnteproyecto->id,
                                 'id_cat_subcategoria' => $this->selectedSubCategoria,
                                 'devengado' => false,
                                 'monto_estimado' => $this->monto_estimado,
@@ -331,7 +329,7 @@ new class extends Component
                             ]);
 
                             TAnteproyectosRubrosComputos::create([
-                                'id_anteproyecto_rubros' => $this->objAnteproyecto->id,
+                                'id_anteproyecto_rubros' => $this->objAnteproyectoRubro->id,
                                 'justificacion_objeto_comprar' => $this->justificacion_objeto_comprar
                             ]);
 
@@ -373,7 +371,7 @@ new class extends Component
     private function validaciones(){
         switch ($this->selectedRubro) {
 
-            case '7': //Becarios
+            case '1': //Becarios
 
                 $this->validate([
                     'actividades_a_desarrollar' =>
@@ -465,7 +463,7 @@ new class extends Component
 
     {{-- FORMULARIOS DINAMICOS --}}
     <form wire:submit.prevent="submit">
-        @if($selectedRubro == 7 && $selectedSubCategoria)
+        @if($selectedRubro == 1 && $selectedSubCategoria)
             @include(
                 'pages.dashboard.forms.becarios'
             )
@@ -477,13 +475,13 @@ new class extends Component
             )
         @endif
 
-        @if($selectedRubro == 6 && $selectedSubCategoria)
+        @if($selectedRubro == 3 && $selectedSubCategoria)
             @include(
                 'pages.dashboard.forms.eventos'
             )
         @endif
 
-        @if($selectedRubro == 8 && $selectedSubCategoria)
+        @if($selectedRubro == 4 && $selectedSubCategoria)
             @include(
                 'pages.dashboard.forms.financ_externo'
             )
@@ -495,19 +493,19 @@ new class extends Component
             )
         @endif
 
-        @if($selectedRubro == 9 && $selectedSubCategoria)
+        @if($selectedRubro == 6 && $selectedSubCategoria)
             @include(
                 'pages.dashboard.forms.otras_peticiones'
             )
         @endif
 
-        @if($selectedRubro == 3 && $selectedSubCategoria)
+        @if($selectedRubro == 7 && $selectedSubCategoria)
             @include(
                 'pages.dashboard.forms.promociones'
             )
         @endif
 
-        @if($selectedRubro == 1 && $selectedSubCategoria)
+        @if($selectedRubro == 8 && $selectedSubCategoria)
             @include(
                 'pages.dashboard.forms.viajes'
             )

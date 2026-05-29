@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_pregunta');
             $table->string('respuesta', 255);
             $table->unsignedBigInteger('usuario_ins');
-            $table->unsignedBigInteger('usuario_mod');
-            $table->unsignedBigInteger('usuario_del');
+            $table->unsignedBigInteger('usuario_mod')->nullable();
+            $table->unsignedBigInteger('usuario_del')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

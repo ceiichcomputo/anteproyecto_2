@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_anteproyecto_rubros');
             $table->unsignedBigInteger('id_cat_estado');
-            $table->unsignedBigInteger('usuario_mod');
-            $table->unsignedBigInteger('usuario_del');
+            $table->unsignedBigInteger('usuario_mod')->nullable();
+            $table->unsignedBigInteger('usuario_del')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

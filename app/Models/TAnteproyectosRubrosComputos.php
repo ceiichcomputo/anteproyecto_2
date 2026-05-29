@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 
-#[Fillable(['id_anteproyecto_rubros','objeto_comprar','justificacion_objeto_comprar','usuario_mod','usuario_del','deleted_at'])]
+#[Fillable(['id_anteproyecto_rubros','objeto_comprar','justificacion_objeto_comprar'])]
 class TAnteproyectosRubrosComputos extends Model
 {
+    public $timestamps = false;
+    
     public function anteproyectos_rubros()
     {
         return $this->belongsTo(

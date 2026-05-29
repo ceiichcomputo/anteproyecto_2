@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->boolean('activo')->default(true);
             $table->unsignedBigInteger('usuario_ins');
-            $table->unsignedBigInteger('usuario_mod');
-            $table->unsignedBigInteger('usuario_del');
+            $table->unsignedBigInteger('usuario_mod')->nullable();
+            $table->unsignedBigInteger('usuario_del')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

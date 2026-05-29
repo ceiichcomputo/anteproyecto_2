@@ -34,6 +34,8 @@ class DatabaseSeeder extends Seeder
             CatPaisSeeder::class,
             CatPreguntaSeeder::class,
             CatRespuestaSeeder::class,
+            UserAcademicoSeeder::class,
+            //CatTipoAnteproyectoSeeder::class,
             //CatTipoFinanciamientoSeeder::class,
             //CatTipoSolicitudesSeeder::class,
         ]);

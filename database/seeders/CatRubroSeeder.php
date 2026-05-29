@@ -48,5 +48,10 @@ class CatRubroSeeder extends Seeder
             'descripcion' => 'Son las promociones',
             'activo' => true,
         ]);
+        CatRubro::create([
+            'titulo' => 'Viajes',
+            'descripcion' => 'Son los viajes',
+            'activo' => true,
+        ]);
     }
 }
