@@ -59,7 +59,7 @@ new class extends Component
 
     public function regresar()
     {
-        return $this->redirect('/dashboard/roles');
+        return $this->redirect('/dashboard/permisos');
     }
 };
 ?>

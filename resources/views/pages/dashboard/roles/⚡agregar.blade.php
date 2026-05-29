@@ -28,9 +28,9 @@ new class extends Component
 
     public function mount(?int $id = null)
     {
-        if (! auth()->user()->can('admin.roles.editar')) {
-            abort(403);
-        }
+        // if (! auth()->user()->can('admin.roles.editar')) {
+        //     abort(403);
+        // }
 
         if( $id ){
             $this->rol = Role::findOrFail($id);
