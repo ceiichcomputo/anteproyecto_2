@@ -286,7 +286,7 @@ new class extends Component
                             ]);
 
                             TAnteproyectosRubrosBecarios::create([
-                                'id_anteproyecto_rubros' => $this->objAnteproyecto->id,
+                                'id_anteproyecto_rubros' => $this->objAnteproyectoRubro->id,
                                 'actividades_a_desarrollar' => $this->actividades_a_desarrollar,
                                 'nombre_becario' => $this->nombre_becario,
                                 'fecha_inicio_becario' => $this->fecha_inicio,
@@ -323,7 +323,7 @@ new class extends Component
                         DB::transaction(function () {
 
                             $this->objAnteproyectoRubro = TAnteproyectosRubro::create([
-                                'id_anteproyecto' => $this->objAnteproyecto->id,
+                                'id_anteproyecto' => $this->objAnteproyectoRubro->id,
                                 'id_cat_subcategoria' => $this->selectedSubCategoria,
                                 'devengado' => false,
                                 'monto_estimado' => $this->monto_estimado,

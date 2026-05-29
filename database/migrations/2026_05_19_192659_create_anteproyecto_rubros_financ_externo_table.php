@@ -19,15 +19,9 @@ return new class extends Migration
             $table->text('nombre_dependencia');
             $table->date('fecha_inicio_evento');
             $table->date('fecha_fin_evento');
-            $table->unsignedBigInteger('usuario_mod');
-            $table->unsignedBigInteger('usuario_del');
-            $table->softDeletes();
-            $table->timestamps();
-
+            
             $table->foreign('id_anteproyecto_rubros')->references('id')->on('t_anteproyectos_rubros')->onDelete('cascade');
             $table->foreign('id_tipo_financiamiento')->references('id')->on('cat_tipo_financiamientos')->onDelete('cascade');
-            $table->foreign('usuario_mod')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('usuario_del')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

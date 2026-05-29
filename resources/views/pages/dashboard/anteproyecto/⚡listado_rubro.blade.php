@@ -47,7 +47,7 @@ new class extends Component
             return TAnteproyectosRubro::with('subcategoria')->where('rubro', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
         }
 
-        return TAnteproyectosRubro::with('subcategoria')->where('id_anteproyecto', $this->anteproyecto->id)->simplepaginate(10); // paginate(10) --- IGNORE ---
+        return TAnteproyectosRubro::with('subcategoria.categoria.rubro')->where('id_anteproyecto', $this->anteproyecto->id)->simplepaginate(10); // paginate(10) --- IGNORE ---
         
     }
     

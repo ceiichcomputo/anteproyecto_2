@@ -29,5 +29,19 @@ class TAnteproyectosRubro extends Model
             'id_cat_subcategoria'
         );
     }
+    public function rubros_becario()
+    {
+        return $this->hasMany(
+            TAnteproyectosRubrosBecarios::class,
+            'id_anteproyecto_rubros'
+        );
+    }
+    public function rubros_computo()
+    {
+        return $this->hasMany(
+            TAnteproyectosRubrosComputos::class,
+            'id_anteproyecto_rubros'
+        );
+    }
 
 }

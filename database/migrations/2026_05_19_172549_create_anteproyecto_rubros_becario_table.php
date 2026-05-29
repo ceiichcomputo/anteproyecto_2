@@ -18,14 +18,8 @@ return new class extends Migration
             $table->text('nombre_becario');
             $table->date('fecha_inicio_becario');
             $table->date('fecha_fin_becario');
-            $table->unsignedBigInteger('usuario_mod')->nullable();
-            $table->unsignedBigInteger('usuario_del')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
 
             $table->foreign('id_anteproyecto_rubros')->references('id')->on('t_anteproyectos_rubros')->onDelete('cascade');
-            $table->foreign('usuario_mod')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('usuario_del')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

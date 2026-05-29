@@ -14,10 +14,6 @@ return new class extends Migration
         Schema::create('cat_tipo_financiamientos', function (Blueprint $table) {
             $table->id();
             $table->string('tipo_financiamiento', 255);
-            $table->unsignedBigInteger('usuario_ins');
-            $table->timestamps();
-
-            $table->foreign('usuario_ins')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
