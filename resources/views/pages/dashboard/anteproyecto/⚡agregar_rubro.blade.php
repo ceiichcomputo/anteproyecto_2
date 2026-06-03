@@ -44,6 +44,7 @@ new class extends Component
     public $objSubcategoriaAEditar = '';
 
     public $modificar_monto_estimado = false;
+    public $pueden_editar = true;
     public $cat_tipo_financiamientos = [];
 
     public function mount(?int $anteproyecto_id = null, ?int $rubro_id = null)

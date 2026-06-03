@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-#[Fillable(['id_ejercicio','id_usuario','devengado','created_at','updated_at'])]
+#[Fillable(['id_ejercicio','id_usuario','enviado', 'usuario_mod','devengado','created_at','updated_at'])]
 class TAnteproyectos extends Model
 {
     use HasFactory;

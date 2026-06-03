@@ -28,7 +28,7 @@ new class extends Component
             //$this->anteproyectosRubros = $this->anteproyecto->anteproyectos_rubros;
         }
 
-        if($this->anteproyecto->id_usuario != 4){
+        if($this->anteproyecto->id_usuario != auth()->id()){
 
             session()->flash('error', 'Por alguna razón, este Anteproyecto no te pertenece.');
             return $this->redirect('/dashboard');
@@ -75,6 +75,11 @@ new class extends Component
         return $this->redirect('/dashboard/anteproyecto/editar_rubro/' . $this->anteproyecto->id . '/' . $rubro_id);
     }
 
+    public function detalle($rubro_id)
+    {
+        return $this->redirect('/dashboard/anteproyecto/detalle_rubro/' . $this->anteproyecto->id . '/' . $rubro_id);
+    }
+
     public function agregar()
     {
         return $this->redirect('/dashboard/anteproyecto/crear_rubro/' . $this->anteproyecto->id);
@@ -84,6 +89,47 @@ new class extends Component
     {
         return $this->redirect('/dashboard/anteproyecto');
     }
+
+    public function concluir()
+    {
+        $this->anteproyecto->update([
+            'enviado' => 1,
+            'usuario_mod' => auth()->id(),
+        ]);
+
+        session()->flash('success', 'El anteproyecto ' . $this->anteproyecto->ejercicio->ejercicio . ' ha sido concluido y enviado correctamente.');
+
+        return $this->redirect('/dashboard/anteproyecto');
+    }
+
+
+    public function exportarPdf()
+    {
+        $anteproyectos = $this->buildQuery()
+            ->with([
+                'subcategoria.categoria.rubro'
+            ])
+            ->get();
+
+        $pdf = Pdf::loadView(
+            'pdf.anteproyectos',
+            compact('anteproyectos')
+        );
+
+        return response()->streamDownload(
+            fn () => print($pdf->output()),
+            'anteproyectos.pdf'
+        );
+    }
+
+    private function buildQuery()
+    {
+        $query = TAnteproyectosRubro::with('subcategoria.categoria.rubro');        
+
+        return $query;
+    }
+
+
 };
 ?>
 <div>
@@ -91,7 +137,9 @@ new class extends Component
         <flux:heading size="xl" level="1">{{ __('Anteproyecto del ejercicio: ' . $this->ejercicio) }}</flux:heading>
         <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
         <flux:button type="button" wire:click="regresar">Regresar</flux:button>
-        <flux:button type="button" wire:click="agregar">Agregar Rubros</flux:button>
+        @if($this->anteproyecto->enviado == 0)
+            <flux:button type="button" wire:click="agregar">Agregar Rubros</flux:button>
+        @endif
         <flux:separator variant="subtle" />
     </div>
 
@@ -124,22 +172,32 @@ new class extends Component
         <flux:table.columns>
             <flux:table.column>ID</flux:table.column>
             <flux:table.column>Rubro</flux:table.column>
+            <flux:table.column>Subcategoría</flux:table.column>
             <flux:table.column>Monto Estimado</flux:table.column>
             <flux:table.column>Acciones</flux:table.column>
         </flux:table.columns>
 
         @if(!$this->rubros)
             <flux:table.row>
-                <flux:table.cell colspan="4" class="text-center">No se encontraron rubros.</flux:table.cell>
+                <flux:table.cell colspan="5" class="text-center">No se encontraron rubros.</flux:table.cell>
             </flux:table.row>
         @else
             <flux:table.rows>
                 @foreach ($this->rubros as $item)
                     <flux:table.row :key="$item->id">
-                        <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
-                        <flux:table.cell class="whitespace-nowrap">{{ $item->subcategoria->subcategoria ?? 'N/A' }}</flux:table.cell>
+                        <flux:table.cell class="whitespace-normal">{{ $item->id }}</flux:table.cell>
+                        <flux:table.cell class="whitespace-normal">{{ $item->subcategoria->categoria->rubro->titulo ?? 'N/A' }}</flux:table.cell>
+                        <flux:table.cell class="whitespace-normal">{{ $item->subcategoria->subcategoria ?? 'N/A' }}</flux:table.cell>
                         <flux:table.cell class="whitespace-normal">{{ $item->monto_estimado }}</flux:table.cell>
                         <flux:table.cell class="whitespace-nowrap">
+
+                            <button
+                                wire:click="detalle({{ $item->id }})"
+                                class="bg-blue-500 text-white px-3 py-1 rounded"
+                            >
+                                Detalle
+                            </button>
+                        @if($this->anteproyecto->enviado == 0)    
                             <button
                                 wire:click="editar({{ $item->id }})"
                                 class="bg-blue-500 text-white px-3 py-1 rounded"
@@ -153,6 +211,7 @@ new class extends Component
                             >
                                 Eliminar
                             </button>
+                        @endif
 
                         </flux:table.cell>
                     </flux:table.row>
@@ -162,4 +221,12 @@ new class extends Component
     </flux:table> 
     <br>
     {{ $this->rubros->links() }}
+
+    <div class="relative mb-6 w-full">
+        <flux:separator variant="subtle" />
+        @if($this->anteproyecto->enviado == 0)
+            <flux:button type="button" wire:click="concluir" wire:confirm="¿Desea concluir el anteproyecto y enviarlo? Ya no podrá realizar más cambios. ¿Desea continuar?"> {{ __('Concluir anteproyecto: ' . $this->ejercicio) }}</flux:button>
+        @endif
+        <flux:button type="button" wire:click="exportarPdf">Exportar PDF</flux:button>
+    </div>
 </div>

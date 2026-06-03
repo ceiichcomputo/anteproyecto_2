@@ -12,19 +12,19 @@
     </div>
 
     <div>
-        <flux:input label="Título del proyecto" type="text" wire:model="titulo_proyecto" />
+        <flux:input label="Título del proyecto" :disabled="!$this->pueden_editar" type="text" wire:model="titulo_proyecto" />
     </div>
 
     <div>
-        <flux:input label="Nombre de la dependencia" type="text" wire:model="nombre_dependencia" />
+        <flux:input label="Nombre de la dependencia" :disabled="!$this->pueden_editar" type="text" wire:model="nombre_dependencia" />
     </div>
 
     <div>
-        <flux:input type="date" label="Fecha inicio" wire:model="fecha_inicio_evento" />
+        <flux:input type="date" label="Fecha inicio" :disabled="!$this->pueden_editar" wire:model="fecha_inicio_evento" />
     </div>
     
     <div>
-        <flux:input type="date" label="Fecha final" wire:model="fecha_fin_evento" />
+        <flux:input type="date" label="Fecha final" :disabled="!$this->pueden_editar" wire:model="fecha_fin_evento" />
     </div>
     
     <div>

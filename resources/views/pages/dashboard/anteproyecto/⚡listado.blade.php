@@ -75,6 +75,7 @@ new class extends Component
         <flux:table.columns>
             <flux:table.column>ID</flux:table.column>
             <flux:table.column>Ejercicio</flux:table.column>
+            <flux:table.column>Estatus</flux:table.column>
             <flux:table.column>Acciones</flux:table.column>
         </flux:table.columns>
 
@@ -83,12 +84,13 @@ new class extends Component
                 <flux:table.row :key="$item->id">
                     <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
                     <flux:table.cell class="whitespace-nowrap">{{ $item->ejercicio->ejercicio }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-nowrap">{{ $item->enviado ? 'Enviado' : 'No enviado' }}</flux:table.cell>
                     <flux:table.cell class="whitespace-nowrap">
                         <button
                             wire:click="editar({{ $item->id }})"
                             class="bg-blue-500 text-white px-3 py-1 rounded"
                         >
-                            Editar
+                            Ver
                         </button>
                         {{-- <button
                             wire:click="delete({{ $item->id }})"
