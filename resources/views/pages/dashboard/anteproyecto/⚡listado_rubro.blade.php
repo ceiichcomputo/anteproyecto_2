@@ -13,6 +13,7 @@ new class extends Component
     use WithPermissions;
     use WithPagination;
 
+    public $perteneceAUsuario = false;
     public $anteproyecto;
     public $ejercicio;
     public $anteproyectosRubros = [];
@@ -26,6 +27,14 @@ new class extends Component
             $this->ejercicio = $this->anteproyecto->ejercicio->ejercicio;
             //$this->anteproyectosRubros = $this->anteproyecto->anteproyectos_rubros;
         }
+
+        if($this->anteproyecto->id_usuario != 4){
+
+            session()->flash('error', 'Por alguna razón, este Anteproyecto no te pertenece.');
+            return $this->redirect('/dashboard');
+        }
+        
+
     }
     
     public $query = '';
@@ -94,6 +103,13 @@ new class extends Component
             class="bg-green-500 text-white p-3 rounded"
         >
             {{ session('success') }}
+        </div>
+    @endif
+    @if(session()->has('error'))
+        <div 
+            x-init="setTimeout(() => show = false, 3000)"
+            class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {{ session('error') }}
         </div>
     @endif
 

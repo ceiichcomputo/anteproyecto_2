@@ -52,4 +52,12 @@ class User extends Authenticatable
             'id_usuario'
         );
     }
+
+    public function anteproyectos()
+    {
+        return $this->hasMany(
+            TAnteproyectos::class,
+            'id_usuario'
+        );
+    }
 }

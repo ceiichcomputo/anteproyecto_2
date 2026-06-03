@@ -21,9 +21,12 @@ new class extends Component
     }
 
     #[Computed]
-    public function catAcademicas()
+    public function anteproyectos()
     {
-        return TAnteproyectos::where('id_ejercicio', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
+        return TAnteproyectos::where(
+                'id_usuario',
+                auth()->id()
+            )->where('id_ejercicio', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
     }
     
     // public function delete($id)
@@ -76,7 +79,7 @@ new class extends Component
         </flux:table.columns>
 
         <flux:table.rows>
-            @foreach ($this->catAcademicas as $item)
+            @foreach ($this->anteproyectos as $item)
                 <flux:table.row :key="$item->id">
                     <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
                     <flux:table.cell class="whitespace-nowrap">{{ $item->ejercicio->ejercicio }}</flux:table.cell>
@@ -101,5 +104,5 @@ new class extends Component
         </flux:table.rows>
     </flux:table> 
     <br>
-    {{ $this->catAcademicas->links() }}
+    {{ $this->anteproyectos->links() }}
 </div>

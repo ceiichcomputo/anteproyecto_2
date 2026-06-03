@@ -57,8 +57,7 @@ new class extends Component
 
 
             $this->cat_tipo_financiamientos = CatTipoFinanciamiento::orderBy('tipo_financiamiento', 'asc')->get();
-            $this->catRubros = CatRubro::orderBy('titulo', 'asc')
-                ->get();
+            $this->catRubros = CatRubro::orderBy('titulo', 'asc')->get();
 
             // Inicialmente vacío
             $this->catCategorias = collect();
@@ -137,7 +136,7 @@ new class extends Component
 
                     session()->flash(
                         'error',
-                        'Ocurrió un error al actualizar el Rubro, por favor intenta nuevamente.'
+                        'Ocurrió un error al Leer el Rubro, por favor intenta nuevamente.'
                     );
                 }
                 
@@ -150,14 +149,15 @@ new class extends Component
 
     public function updatedSelectedRubro()
     {
-        // Resetear subcategoría
+        // Resetear categoría
         $this->selectedCategoria = '';
+        // Resetear subcategoría
+        $this->selectedSubCategoria = '';
+        $this->catSubCategorias = collect();
 
         // Si no seleccionó categoría
         if (!$this->selectedRubro) {
-
             $this->catCategorias = collect();
-
             return;
         }
 
@@ -180,9 +180,7 @@ new class extends Component
 
         // Si no seleccionó categoría
         if (!$this->selectedCategoria) {
-
             $this->catSubCategorias = collect();
-
             return;
         }
 
@@ -202,17 +200,14 @@ new class extends Component
     
     public function updatedSelectedSubCategoria()
     {
-
         // Si no seleccionó categoría
         if (!$this->selectedSubCategoria) {
             $this->monto_estimado = 0;
             return;
-        }
-        
+        }        
 
         // Consultar subcategorías
-        $this->objSubcategoria =
-            CatSubcategoria::findOrFail($this->selectedSubCategoria);
+        $this->objSubcategoria = CatSubcategoria::findOrFail($this->selectedSubCategoria);
 
         $this->monto_estimado = $this->objSubcategoria->monto_estimado;
         $this->modificar_monto_estimado = $this->objSubcategoria->modificar_monto_estimado;
@@ -282,8 +277,9 @@ new class extends Component
 
     function submit() {
 
-        if(!$this->validaciones())
-        return;
+        if(!$this->validaciones()){
+                return;
+        }
                     
         try{
 
@@ -545,6 +541,8 @@ new class extends Component
                 'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
                 'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
                 ]);
+
+                break;
                 
             case '4': //Financiamiento externo
 
