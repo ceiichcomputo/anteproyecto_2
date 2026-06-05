@@ -13,13 +13,13 @@ class CatCategoria extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function userDetalle()
-    {
-        return $this->hasOne(
-            UsersDetalle::class,
-            'id_nombramiento'
-        );
-    }
+    // public function userDetalle()
+    // {
+    //     return $this->hasOne(
+    //         UsersDetalle::class,
+    //         'id_nombramiento'
+    //     );
+    // }
 
     public function rubro()
     {

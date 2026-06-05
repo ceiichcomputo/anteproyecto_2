@@ -112,7 +112,7 @@ new class extends Component
             ->get();
 
         $pdf = Pdf::loadView(
-            'pdf.anteproyectos',
+            'pdf.vistaPreviaAnteproyecto',
             compact('anteproyectos')
         );
 
@@ -124,7 +124,8 @@ new class extends Component
 
     private function buildQuery()
     {
-        $query = TAnteproyectosRubro::with('subcategoria.categoria.rubro');        
+        $query = TAnteproyectosRubro::with('subcategoria.categoria.rubro', 'rubros_becario', 'rubros_computo', 'rubros_eventos', 'rubros_fin_exts', 'rubros_invitados',
+        'rubros_otr_pets', 'rubros_promos', 'rubros_viajes');        
 
         return $query;
     }

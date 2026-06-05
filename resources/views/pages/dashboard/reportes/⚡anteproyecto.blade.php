@@ -57,19 +57,19 @@ new class extends Component
 
 
         if($this->selectedRubro && !$this->selectedCategoria && !$this->selectedSubCategoria){
-            return TAnteproyectosRubro::with('subcategoria.categoria.rubro')->whereHas(
+            return TAnteproyectosRubro::with('subcategoria.categoria.rubro', 'rubros_becario', 'rubros_computo')->whereHas(
                 'subcategoria.categoria.rubro',
                 fn($q) => $q->where('id', $this->selectedRubro)
             )->simplepaginate(5); // paginate(10) --- IGNORE ---
         }
         if($this->selectedCategoria && !$this->selectedSubCategoria){
-            return TAnteproyectosRubro::with('subcategoria.categoria.rubro')->whereHas(
+            return TAnteproyectosRubro::with('subcategoria.categoria.rubro', 'rubros_becario', 'rubros_computo')->whereHas(
                 'subcategoria.categoria',
                 fn($q) => $q->where('id', $this->selectedCategoria)
             )->simplepaginate(5); // paginate(10) --- IGNORE ---
         }
         if($this->selectedSubCategoria ){
-            return TAnteproyectosRubro::with('subcategoria.categoria.rubro')->whereHas(
+            return TAnteproyectosRubro::with('subcategoria.categoria.rubro', 'rubros_becario', 'rubros_computo')->whereHas(
                 'subcategoria',
                 fn($q) => $q->where('id', $this->selectedSubCategoria)
             )->simplepaginate(5); // paginate(10) --- IGNORE ---
@@ -295,11 +295,12 @@ new class extends Component
         <flux:table.rows>
             @foreach ($this->anteproyectos as $item)
                 <flux:table.row :key="$item->id">
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->anteproyectos->ejercicio->ejercicio ?? 'N/A' }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->anteproyectos->usuario->detalle->nombres ?? 'N/A' }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->subcategoria->categoria->rubro->titulo ?? 'N/A' }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->subcategoria->subcategoria ?? 'N/A' }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal">{{ $item->id }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal">{{ $item->anteproyecto->ejercicio->ejercicio ?? 'N/A' }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal">{{ $item->anteproyecto->usuario->detalle->nombres ?? 'N/A' }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal">{{ $item->subcategoria->categoria->rubro->titulo ?? 'N/A' }}</flux:table.cell>
+                    <flux:table.cell class="whitespace-normal">{{ $item->subcategoria->subcategoria ?? 'N/A' }}</flux:table.cell>
+                    {{-- <flux:table.cell class="whitespace-normal">{{ $item->rubros_becario->isNotEmpty() ? $item->rubros_becario->first()->actividades_a_desarrollar : 'No' }}</flux:table.cell> --}}
                 </flux:table.row>
             @endforeach
         </flux:table.rows>

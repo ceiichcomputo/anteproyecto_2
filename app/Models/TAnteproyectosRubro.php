@@ -15,7 +15,7 @@ class TAnteproyectosRubro extends Model
     use SoftDeletes;
 
 
-    public function anteproyectos()
+    public function anteproyecto()
     {
         return $this->belongsTo(
             TAnteproyectos::class,
@@ -31,15 +31,57 @@ class TAnteproyectosRubro extends Model
     }
     public function rubros_becario()
     {
-        return $this->hasMany(
+        return $this->hasOne(
             TAnteproyectosRubrosBecarios::class,
             'id_anteproyecto_rubros'
         );
     }
     public function rubros_computo()
     {
-        return $this->hasMany(
+        return $this->hasOne(
             TAnteproyectosRubrosComputos::class,
+            'id_anteproyecto_rubros'
+        );
+    }
+    public function rubros_eventos()
+    {
+        return $this->hasOne(
+            TAnteproyectosRubrosEventos::class,
+            'id_anteproyecto_rubros'
+        );
+    }
+    public function rubros_fin_exts()
+    {
+        return $this->hasOne(
+            TAnteproyectosRubrosFinExts::class,
+            'id_anteproyecto_rubros'
+        );
+    }
+    public function rubros_invitados()
+    {
+        return $this->hasOne(
+            TAnteproyectosRubrosInvitados::class,
+            'id_anteproyecto_rubros'
+        );
+    }
+    public function rubros_otr_pets()
+    {
+        return $this->hasOne(
+            TAnteproyectosRubrosOtrPets::class,
+            'id_anteproyecto_rubros'
+        );
+    }
+    public function rubros_promos()
+    {
+        return $this->hasOne(
+            TAnteproyectosRubrosPromos::class,
+            'id_anteproyecto_rubros'
+        );
+    }
+    public function rubros_viajes()
+    {
+        return $this->hasOne(
+            TAnteproyectosRubrosViajes::class,
             'id_anteproyecto_rubros'
         );
     }

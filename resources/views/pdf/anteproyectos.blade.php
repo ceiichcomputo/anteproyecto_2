@@ -54,7 +54,7 @@
                 </td>
 
                 <td>
-                    {{ $anteproyecto->subcategoria->nombre }}
+                    {{ $anteproyecto->subcategoria->subcategoria }}
                 </td>
 
             </tr>

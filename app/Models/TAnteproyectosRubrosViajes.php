@@ -10,4 +10,19 @@ use Illuminate\Database\Eloquent\Model;
 class TAnteproyectosRubrosViajes extends Model
 {
     public $timestamps = false;
+
+    public function anteproyectos_rubros()
+    {
+        return $this->belongsTo(
+            TAnteproyectosRubro::class,
+            'id_anteproyecto_rubros'
+        );
+    }
+    public function estado()
+    {
+        return $this->hasOne(
+            CatEstado::class,
+            'id_estado'
+        );
+    }
 }

@@ -10,4 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(['tipo_financiamiento','usuario_ins'])]
 class CatTipoFinanciamiento extends Model
 {
+    public function rubros_fin_ext()
+    {
+        return $this->hasMany(
+            TAnteproyectosRubrosFinExts::class,
+            'id_tipo_financiamiento'
+        );
+    }
 }

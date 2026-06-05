@@ -10,4 +10,19 @@ use Illuminate\Database\Eloquent\Model;
 class TAnteproyectosRubrosFinExts extends Model
 {
     public $timestamps = false;
+
+    public function anteproyectos_rubros()
+    {
+        return $this->belongsTo(
+            TAnteproyectosRubro::class,
+            'id_anteproyecto_rubros'
+        );
+    }
+    public function tipo_financiamiento()
+    {
+        return $this->belongsTo(
+            CatTipoFinanciamiento::class,
+            'id_tipo_financiamiento'
+        );
+    }
 }

@@ -10,4 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 class TAnteproyectosRubrosOtrPets extends Model
 {
     public $timestamps = false;
+
+    public function anteproyectos_rubros()
+    {
+        return $this->belongsTo(
+            TAnteproyectosRubro::class,
+            'id_anteproyecto_rubros'
+        );
+    }
 }
