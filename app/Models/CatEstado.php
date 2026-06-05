@@ -8,14 +8,14 @@ class CatEstado extends Model
 {
     public function rubros_viajes()
     {
-        return $this->belongsTo(
+        return $this->hasMany(
             TAnteproyectosRubrosViajes::class,
             'id_estado'
         );
     }
     public function pais()
     {
-        return $this->hasOne(
+        return $this->belongsTo(
             CatPais::class,
             'id_pais'
         );

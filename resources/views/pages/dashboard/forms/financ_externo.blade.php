@@ -1,7 +1,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
     <div>
-        <flux:select label="Tipo de Financiamiento" wire:model.live="selected_tipo_financiamiento">
+        <flux:select label="Tipo de Financiamiento" :disabled="!$this->pueden_editar" wire:model.live="selected_tipo_financiamiento">
             <flux:select.option value="">Selecciona el Tipo de financiamiento</flux:select.option>
                 @foreach($cat_tipo_financiamientos as $item)
                     <flux:select.option value="{{ $item->id }}">

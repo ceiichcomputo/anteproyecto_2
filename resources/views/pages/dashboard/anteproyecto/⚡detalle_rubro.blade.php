@@ -12,6 +12,9 @@ use App\Models\CatCategoria;
 use App\Models\CatSubcategoria;
 use App\Models\CatTipoFinanciamiento;
 use App\Models\CatTipoSolicitudes;
+use App\Models\CatCategoriaAcademicas;
+use App\Models\CatPais;
+use App\Models\CatEstado;
 use App\Models\TAnteproyectosRubrosBecarios;
 use App\Models\TAnteproyectosRubrosComputos;
 use App\Models\TAnteproyectosRubrosEventos;
@@ -46,6 +49,12 @@ new class extends Component
     public $modificar_monto_estimado = false;
     public $pueden_editar = false;
     public $cat_tipo_financiamientos = [];
+    public $cat_tipo_solicitudes = [];
+    public $cat_categoria_academicas = [];
+    public $catPaises = [];
+    public $catEstados = [];
+    public $selectedPais = '';
+    public $selectedEstado = '';
 
     public function mount(?int $anteproyecto_id = null, ?int $rubro_id = null)
     {
@@ -58,6 +67,8 @@ new class extends Component
 
 
             $this->cat_tipo_financiamientos = CatTipoFinanciamiento::orderBy('tipo_financiamiento', 'asc')->get();
+            $this->cat_tipo_solicitudes = CatTipoSolicitudes::orderBy('tipo_solicitud', 'asc')->get();
+            $this->cat_categoria_academicas = CatCategoriaAcademicas::orderBy('categoria_academica', 'asc')->get();
             $this->catRubros = CatRubro::orderBy('titulo', 'asc')->get();
 
             // Inicialmente vacío
@@ -125,7 +136,44 @@ new class extends Component
                             $this->fecha_inicio_evento = $this->obj_ant_rubro_fin_ext->fecha_inicio_evento;
                             $this->fecha_fin_evento = $this->obj_ant_rubro_fin_ext->fecha_fin_evento;
                             $this->selected_tipo_financiamiento = $this->obj_ant_rubro_fin_ext->id_tipo_financiamiento;
+                            break;
+                        case '5': //Invitados
+                            $this->obj_ant_rubro_invitados = TAnteproyectosRubrosInvitados::where('id_anteproyecto_rubros', $rubro_id)->first();
+                            $this->actividades_a_desarrollar = $this->obj_ant_rubro_invitados->actividades_a_desarrollar;
+                            $this->descripcion_evento = $this->obj_ant_rubro_invitados->descripcion_evento;
+                            $this->nombre_invitado = $this->obj_ant_rubro_invitados->nombre_invitado;
+                            $this->procedencia_invitado = $this->obj_ant_rubro_invitados->procedencia_invitado;
+                            $this->fecha_inicio_evento = $this->obj_ant_rubro_invitados->fecha_inicio_evento;
+                            $this->fecha_fin_evento = $this->obj_ant_rubro_invitados->fecha_fin_evento;
+                            break; 
+                        case '6': //Otras peticiones
+                            $this->obj_ant_rubro_otr_pets = TAnteproyectosRubrosOtrPets::where('id_anteproyecto_rubros', $rubro_id)->first();
+                            $this->peticion = $this->obj_ant_rubro_otr_pets->peticion;
+                            break; 
+                        case '7': //Promociones
+                            $this->obj_ant_rubro_promos = TAnteproyectosRubrosPromos::where('id_anteproyecto_rubros', $rubro_id)->first();
+                            $this->id_tipo_solicitud = $this->obj_ant_rubro_promos->id_tipo_solicitud;
+                            $this->id_categoria_academica = $this->obj_ant_rubro_promos->id_categoria_academica;
+                            $this->descripcion_promocion = $this->obj_ant_rubro_promos->descripcion_promocion;
+                            $this->fecha_inicio_promocion = $this->obj_ant_rubro_promos->fecha_inicio_promocion;
+                            $this->fecha_fin_promocion = $this->obj_ant_rubro_promos->fecha_fin_promocion;
+                            $this->selected_tipo_solicitud = $this->obj_ant_rubro_promos->id_tipo_solicitud;
+                            $this->selected_categoria_academica = $this->obj_ant_rubro_promos->id_categoria_academica;
+                            break; 
+                        case '8': //Viajes
+                            $this->obj_ant_rubro_viajes = TAnteproyectosRubrosViajes::where('id_anteproyecto_rubros', $rubro_id)->first();
+                            $this->id_cat_estado = $this->obj_ant_rubro_viajes->id_cat_estado;
+                            $this->lugar_institucion = $this->obj_ant_rubro_viajes->lugar_institucion;
+                            $this->fecha_inicio_viaje = $this->obj_ant_rubro_viajes->fecha_inicio_viaje;
+                            $this->fecha_fin_viaje = $this->obj_ant_rubro_viajes->fecha_fin_viaje;
+                            $this->selected_estado = $this->obj_ant_rubro_viajes->id_estado;
 
+                            // dd($this->obj_ant_rubro_viajes->estado->pais->id);
+
+                            $this->catPaises = CatPais::where('id', $this->obj_ant_rubro_viajes->estado->pais->id)->get();
+                            $this->selectedPais = $this->obj_ant_rubro_viajes->estado->pais->id;
+                            $this->catEstados = CatEstado::where('id', $this->obj_ant_rubro_viajes->id_cat_estado)->get();
+                            $this->selectedEstado = $this->obj_ant_rubro_viajes->id_cat_estado;
                             break; 
 
 
@@ -139,9 +187,6 @@ new class extends Component
                         'Ocurrió un error al Leer el Rubro, por favor intenta nuevamente.'
                     );
                 }
-                
-
-
             }
 
         }
@@ -203,7 +248,55 @@ new class extends Component
 
     public $selected_tipo_financiamiento = '';
     public $obj_ant_rubro_fin_ext;
+    /*
+    |--------------------------------------------------------------------------
+    | Invitados
+    |--------------------------------------------------------------------------
+    */
+    // public $actividades_a_desarrollar;
+    // public $descripcion_evento;
+    public $nombre_invitado;
+    public $procedencia_invitado;
+    //public $fecha_inicio_evento;
+    //public $fecha_fin_evento;
 
+    public $obj_ant_rubro_invitados;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Otras peticiones
+    |--------------------------------------------------------------------------
+    */
+    public $peticion;
+
+    public $obj_ant_rubro_otr_pets;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Promociones
+    |--------------------------------------------------------------------------
+    */
+    public $id_tipo_solicitud;
+    public $id_categoria_academica;
+    public $descripcion_promocion;
+    public $fecha_inicio_promocion;
+    public $fecha_fin_promocion;
+
+    public $selected_tipo_solicitud = '';
+    public $selected_categoria_academica = '';
+    public $obj_ant_rubro_promos;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Viajes
+    |--------------------------------------------------------------------------
+    */
+    public $id_estado;
+    public $lugar_institucion;
+    public $fecha_inicio_viaje;
+    public $fecha_fin_viaje;
+
+    public $obj_ant_rubro_viajes;
 
 
     public function regresar()

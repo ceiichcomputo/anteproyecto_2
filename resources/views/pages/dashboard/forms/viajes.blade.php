@@ -1,81 +1,41 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-    {{-- DESTINO --}}
     <div>
-        <label class="block mb-2 font-semibold">
-            Destino
-        </label>
-        <input
-            type="text"
-            wire:model="destino"
-            class="w-full border rounded px-3 py-2"
-        >
-
-        @error('destino')
-
-            <span class="text-red-500 text-sm">
-
-                {{ $message }}
-
-            </span>
-
-        @enderror
-
+        <flux:select label="País destino" :disabled="!$this->pueden_editar" wire:model.live="selectedPais">
+            <flux:select.option value="">Selecciona el País destino</flux:select.option>
+                @foreach($catPaises as $item)
+                    <flux:select.option value="{{ $item->id }}">
+                        {{ $item->pais }}
+                    </flux:select.option>
+                @endforeach
+        </flux:select>
     </div>
 
-    {{-- FECHA --}}
     <div>
-
-        <label class="block mb-2 font-semibold">
-
-            Fecha salida
-
-        </label>
-
-        <input
-            type="date"
-            wire:model="fechaSalida"
-            class="w-full border rounded px-3 py-2"
-        >
-
-        @error('fechaSalida')
-
-            <span class="text-red-500 text-sm">
-
-                {{ $message }}
-
-            </span>
-
-        @enderror
-
+        <flux:select label="Estado destino" :disabled="!$this->pueden_editar" wire:model.live="selectedEstado">
+            <flux:select.option value="">Selecciona el Estado destino</flux:select.option>
+                @foreach($catEstados as $item)
+                    <flux:select.option value="{{ $item->id }}">
+                        {{ $item->estado }}
+                    </flux:select.option>
+                @endforeach
+        </flux:select>
     </div>
 
-    {{-- HOSPEDAJE --}}
     <div>
+        <flux:input label="Lugar institución" :disabled="!$this->pueden_editar" type="text" wire:model="lugar_institucion" />
+    </div>
 
-        <label class="block mb-2 font-semibold">
-
-            Hospedaje
-
-        </label>
-
-        <input
-            type="number"
-            step="0.01"
-            wire:model="hospedaje"
-            class="w-full border rounded px-3 py-2"
-        >
-
-        @error('hospedaje')
-
-            <span class="text-red-500 text-sm">
-
-                {{ $message }}
-
-            </span>
-
-        @enderror
-
+    <div>
+        <flux:input type="date" label="Fecha inicio" :disabled="!$this->pueden_editar" wire:model="fecha_inicio_viaje" />
+    </div>
+    
+    <div>
+        <flux:input type="date" label="Fecha final" :disabled="!$this->pueden_editar" wire:model="fecha_fin_viaje" />
+    </div>
+    
+    <div>
+        <flux:input label="Monto estimado" :disabled="!$this->modificar_monto_estimado" type="number" wire:model="monto_estimado" />
     </div>
 
 </div>
