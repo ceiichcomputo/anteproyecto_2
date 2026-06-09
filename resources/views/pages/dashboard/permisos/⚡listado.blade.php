@@ -66,29 +66,32 @@ new class extends Component
             <flux:button type="button" wire:click="resetSearch">Limpiar</flux:button>
         </flux:input.group>
     </form>
-    <flux:table class="table w-full">
-        <flux:table.columns>
-            <flux:table.column>ID</flux:table.column>
-            <flux:table.column>Módulo</flux:table.column>
-            <flux:table.column>Permiso</flux:table.column>
-            <flux:table.column>Descripción</flux:table.column>
-            <flux:table.column>Acciones</flux:table.column>
-        </flux:table.columns>
 
-        <flux:table.rows>
-            @foreach ($this->permisos as $item)
-                <flux:table.row :key="$item->id">
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->module }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->name }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->description }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal"><a href="{{ route('permisos.editar', $item->id) }}" 
-                        class="btn btn-sm btn-primary">Editar</a>
-                    </flux:table.cell>
-                </flux:table.row>
-            @endforeach
-        </flux:table.rows>
-    </flux:table> 
+   <div class="relative mb-6 w-full overflow-x-auto">
+        <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
+            <flux:table.columns>
+                <flux:table.column>ID</flux:table.column>
+                <flux:table.column>Módulo</flux:table.column>
+                <flux:table.column>Permiso</flux:table.column>
+                <flux:table.column>Descripción</flux:table.column>
+                <flux:table.column>Acciones</flux:table.column>
+            </flux:table.columns>
+
+            <flux:table.rows>
+                @foreach ($this->permisos as $item)
+                    <flux:table.row :key="$item->id">
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->id }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->module }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->name }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->description }}</flux:table.cell>
+                        <flux:table.cell class="whitespace-nowrap"><a href="{{ route('permisos.editar', $item->id) }}" 
+                            class="bg-blue-500 text-white px-3 py-1 rounded">Editar</a>
+                        </flux:table.cell>
+                    </flux:table.row>
+                @endforeach
+            </flux:table.rows>
+        </flux:table> 
+    </div>
     <br>
     {{ $this->permisos->links() }}
 </div>

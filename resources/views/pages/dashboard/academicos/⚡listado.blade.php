@@ -66,7 +66,7 @@ new class extends Component
             <flux:button type="button" wire:click="resetSearch">Limpiar</flux:button>
         </flux:input.group>
     </form>
-    <flux:table class="table w-full">
+    <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
         <flux:table.columns>
             <flux:table.column>ID</flux:table.column>
             <flux:table.column>Usuario</flux:table.column>
@@ -78,12 +78,12 @@ new class extends Component
         <flux:table.rows>
             @foreach ($this->academicos as $item)
                 <flux:table.row :key="$item->id">
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->user->name }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->nombres }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->nombramiento->nombramiento }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal"><a href="{{ route('academicos.editar', $item->id) }}" 
-                        class="btn btn-sm btn-primary">Editar</a>
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->id }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->user->name }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->nombres }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->nombramiento->nombramiento }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-normal break-words"><a href="{{ route('academicos.editar', $item->id) }}" 
+                        class="bg-blue-500 text-white px-3 py-1 rounded">Editar</a>
                     </flux:table.cell>
                 </flux:table.row>
             @endforeach

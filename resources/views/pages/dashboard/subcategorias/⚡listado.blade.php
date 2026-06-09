@@ -100,7 +100,7 @@ new class extends Component
             <flux:button type="button" wire:click="resetSearch">Limpiar</flux:button>
         </flux:input.group>
     </form>
-    <flux:table class="table w-full">
+    <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
         <flux:table.columns>
             <flux:table.column>ID</flux:table.column>
             <flux:table.column>Título</flux:table.column>
@@ -111,11 +111,11 @@ new class extends Component
         <flux:table.rows>
             @foreach ($this->subcategorias as $item)
                 <flux:table.row :key="$item->id">
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->id }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">{{ $item->subcategoria }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->descripcion }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->monto_estimado }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-nowrap">
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->id }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->subcategoria }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->descripcion }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->monto_estimado }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-nowrap">
                         <button
                             wire:click="editar({{ $this->categoria->id }}, {{ $item->id }})"
                             class="bg-blue-500 text-white px-3 py-1 rounded"

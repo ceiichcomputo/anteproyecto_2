@@ -1019,11 +1019,11 @@ new class extends Component
         @endif
 
         {{-- BOTON --}}
-        @if($selectedRubro)
+        @if($selectedSubCategoria)
             <div class="mt-6 flex justify-end">
                 <button
                     type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded"
+                    class="bg-blue-500 hover:bg-blue-400 text-gray px-5 py-2 rounded"
                 >
                     Guardar
                 </button>

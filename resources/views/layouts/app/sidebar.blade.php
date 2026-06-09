@@ -13,7 +13,7 @@
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Platform')" class="grid">
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard') }}
+                        {{ __('Inicio') }}
                     </flux:sidebar.item>
                     @can('admin.usuarios.listar')
                         <flux:sidebar.item icon="home" :href="route('usuarios.listado')" :current="request()->routeIs('usuarios.listado')" wire:navigate>
@@ -55,7 +55,7 @@
 
             <flux:spacer />
 
-            <flux:sidebar.nav>
+            {{-- <flux:sidebar.nav>
                 <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                     {{ __('Repository') }}
                 </flux:sidebar.item>
@@ -63,7 +63,7 @@
                 <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
                     {{ __('Documentation') }}
                 </flux:sidebar.item>
-            </flux:sidebar.nav>
+            </flux:sidebar.nav> --}}
 
             <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
         </flux:sidebar>
@@ -101,7 +101,7 @@
 
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>
-                            {{ __('Settings') }}
+                            {{ __('Configuración') }}
                         </flux:menu.item>
                     </flux:menu.radio.group>
 
@@ -116,7 +116,7 @@
                             class="w-full cursor-pointer"
                             data-test="logout-button"
                         >
-                            {{ __('Log out') }}
+                            {{ __('Cerrar sesión') }}
                         </flux:menu.item>
                     </form>
                 </flux:menu>

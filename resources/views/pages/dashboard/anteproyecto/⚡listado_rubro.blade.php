@@ -5,6 +5,7 @@ use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\TAnteproyectos;
 use App\Models\CatEjercicio;
+use App\Models\CatRubro;
 use App\Models\TAnteproyectosRubro;
 use App\Livewire\Traits\WithPermissions;
 
@@ -46,17 +47,44 @@ new class extends Component
 
     public function resetSearch()
     {
-        return $this->redirect('/dashboard/categorias');
+        return $this->redirect('/dashboard/anteproyecto/listado_rubro/' . $this->anteproyecto->id);
     }
 
     #[Computed]
     public function rubros()
     {
         if($this->query){
-            return TAnteproyectosRubro::with('subcategoria')->where('rubro', 'like', '%'.$this->query.'%')->simplepaginate(10); // paginate(10) --- IGNORE ---
+            return TAnteproyectosRubro::with('subcategoria.categoria.rubro')->where(CatRubro::select('titulo')
+            ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+            ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+            ->whereColumn(
+                'cat_subcategorias.id',
+                't_anteproyectos_rubros.id_cat_subcategoria'
+            )
+            ->limit(1), 'like', '%'.$this->query.'%')->orderBy(
+        CatRubro::select('titulo')
+            ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+            ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+            ->whereColumn(
+                'cat_subcategorias.id',
+                't_anteproyectos_rubros.id_cat_subcategoria'
+            )
+            ->limit(1)
+    )
+    ->simplePaginate(10);
         }
 
-        return TAnteproyectosRubro::with('subcategoria.categoria.rubro')->where('id_anteproyecto', $this->anteproyecto->id)->simplepaginate(10); // paginate(10) --- IGNORE ---
+        return TAnteproyectosRubro::with('subcategoria.categoria.rubro')->where('id_anteproyecto', $this->anteproyecto->id)->orderBy(
+        CatRubro::select('titulo')
+            ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+            ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+            ->whereColumn(
+                'cat_subcategorias.id',
+                't_anteproyectos_rubros.id_cat_subcategoria'
+            )
+            ->limit(1)
+    )
+    ->simplePaginate(10);
         
     }
     
@@ -124,8 +152,16 @@ new class extends Component
 
     private function buildQuery()
     {
-        $query = TAnteproyectosRubro::with('subcategoria.categoria.rubro', 'rubros_becario', 'rubros_computo', 'rubros_eventos', 'rubros_fin_exts', 'rubros_invitados',
-        'rubros_otr_pets', 'rubros_promos', 'rubros_viajes');        
+        $query = TAnteproyectosRubro::with('subcategoria.categoria.rubro')->orderBy(
+        CatRubro::select('titulo')
+            ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+            ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+            ->whereColumn(
+                'cat_subcategorias.id',
+                't_anteproyectos_rubros.id_cat_subcategoria'
+            )
+            ->limit(1)
+    );        
 
         return $query;
     }
@@ -169,7 +205,7 @@ new class extends Component
             <flux:button type="button" wire:click="resetSearch">Limpiar</flux:button>
         </flux:input.group>
     </form>
-    <flux:table class="table w-full">
+    <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
         <flux:table.columns>
             <flux:table.column>ID</flux:table.column>
             <flux:table.column>Rubro</flux:table.column>
@@ -186,11 +222,11 @@ new class extends Component
             <flux:table.rows>
                 @foreach ($this->rubros as $item)
                     <flux:table.row :key="$item->id">
-                        <flux:table.cell class="whitespace-normal">{{ $item->id }}</flux:table.cell>
-                        <flux:table.cell class="whitespace-normal">{{ $item->subcategoria->categoria->rubro->titulo ?? 'N/A' }}</flux:table.cell>
-                        <flux:table.cell class="whitespace-normal">{{ $item->subcategoria->subcategoria ?? 'N/A' }}</flux:table.cell>
-                        <flux:table.cell class="whitespace-normal">{{ $item->monto_estimado }}</flux:table.cell>
-                        <flux:table.cell class="whitespace-nowrap">
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->id }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->subcategoria->categoria->rubro->titulo ?? 'N/A' }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->subcategoria->subcategoria ?? 'N/A' }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->monto_estimado }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-nowrap">
 
                             <button
                                 wire:click="detalle({{ $item->id }})"

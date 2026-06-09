@@ -60,22 +60,58 @@ new class extends Component
             return TAnteproyectosRubro::with('subcategoria.categoria.rubro', 'rubros_becario', 'rubros_computo')->whereHas(
                 'subcategoria.categoria.rubro',
                 fn($q) => $q->where('id', $this->selectedRubro)
+            )->orderBy(
+                CatRubro::select('titulo')
+                    ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+                    ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+                    ->whereColumn(
+                        'cat_subcategorias.id',
+                        't_anteproyectos_rubros.id_cat_subcategoria'
+                    )
+                    ->limit(1)
             )->simplepaginate(5); // paginate(10) --- IGNORE ---
         }
         if($this->selectedCategoria && !$this->selectedSubCategoria){
             return TAnteproyectosRubro::with('subcategoria.categoria.rubro', 'rubros_becario', 'rubros_computo')->whereHas(
                 'subcategoria.categoria',
                 fn($q) => $q->where('id', $this->selectedCategoria)
+            )->orderBy(
+                CatRubro::select('titulo')
+                    ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+                    ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+                    ->whereColumn(
+                        'cat_subcategorias.id',
+                        't_anteproyectos_rubros.id_cat_subcategoria'
+                    )
+                    ->limit(1)
             )->simplepaginate(5); // paginate(10) --- IGNORE ---
         }
         if($this->selectedSubCategoria ){
             return TAnteproyectosRubro::with('subcategoria.categoria.rubro', 'rubros_becario', 'rubros_computo')->whereHas(
                 'subcategoria',
                 fn($q) => $q->where('id', $this->selectedSubCategoria)
+            )->orderBy(
+                CatRubro::select('titulo')
+                    ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+                    ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+                    ->whereColumn(
+                        'cat_subcategorias.id',
+                        't_anteproyectos_rubros.id_cat_subcategoria'
+                    )
+                    ->limit(1)
             )->simplepaginate(5); // paginate(10) --- IGNORE ---
         }
 
-        return TAnteproyectosRubro::with('subcategoria.categoria.rubro')->simplepaginate(5); // paginate(10) --- IGNORE ---
+        return TAnteproyectosRubro::with('subcategoria.categoria.rubro')->orderBy(
+                CatRubro::select('titulo')
+                    ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+                    ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+                    ->whereColumn(
+                        'cat_subcategorias.id',
+                        't_anteproyectos_rubros.id_cat_subcategoria'
+                    )
+                    ->limit(1)
+            )->simplepaginate(5); // paginate(10) --- IGNORE ---
     }
     
     public function updatedSelectedRubro()
@@ -172,25 +208,61 @@ new class extends Component
 
     private function buildQuery()
     {
-        $query = TAnteproyectosRubro::with('subcategoria.categoria.rubro');
+        $query = TAnteproyectosRubro::with('subcategoria.categoria.rubro')->orderBy(
+            CatRubro::select('titulo')
+                ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+                ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+                ->whereColumn(
+                    'cat_subcategorias.id',
+                    't_anteproyectos_rubros.id_cat_subcategoria'
+                )
+                ->limit(1)
+        );       
 
         if($this->selectedRubro && !$this->selectedCategoria && !$this->selectedSubCategoria){
             $query->whereHas(
                 'subcategoria.categoria.rubro',
                 fn($q) => $q->where('id', $this->selectedRubro)
-            );
+            )->orderBy(
+                CatRubro::select('titulo')
+                    ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+                    ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+                    ->whereColumn(
+                        'cat_subcategorias.id',
+                        't_anteproyectos_rubros.id_cat_subcategoria'
+                    )
+                    ->limit(1)
+            );       
         }
         if($this->selectedCategoria && !$this->selectedSubCategoria){
             $query->whereHas(
                 'subcategoria.categoria',
                 fn($q) => $q->where('id', $this->selectedCategoria)
-            );
+            )->orderBy(
+                CatRubro::select('titulo')
+                    ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+                    ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+                    ->whereColumn(
+                        'cat_subcategorias.id',
+                        't_anteproyectos_rubros.id_cat_subcategoria'
+                    )
+                    ->limit(1)
+            );       
         }
         if($this->selectedSubCategoria ){
             $query->whereHas(
                 'subcategoria',
                 fn($q) => $q->where('id', $this->selectedSubCategoria)
-            );
+            )->orderBy(
+                CatRubro::select('titulo')
+                    ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+                    ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+                    ->whereColumn(
+                        'cat_subcategorias.id',
+                        't_anteproyectos_rubros.id_cat_subcategoria'
+                    )
+                    ->limit(1)
+            );       
         }
 
         return $query;
@@ -283,7 +355,7 @@ new class extends Component
         <flux:button type="button" wire:click="exportarExcel">Exportar Excel</flux:button>
         <flux:button type="button" wire:click="exportarPdf">Exportar PDF</flux:button>
     </div>
-    <flux:table class="table w-full">
+    <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
         <flux:table.columns>
             <flux:table.column>ID</flux:table.column>
             <flux:table.column>Ejercicio</flux:table.column>
@@ -295,12 +367,12 @@ new class extends Component
         <flux:table.rows>
             @foreach ($this->anteproyectos as $item)
                 <flux:table.row :key="$item->id">
-                    <flux:table.cell class="whitespace-normal">{{ $item->id }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->anteproyecto->ejercicio->ejercicio ?? 'N/A' }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->anteproyecto->usuario->detalle->nombres ?? 'N/A' }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->subcategoria->categoria->rubro->titulo ?? 'N/A' }}</flux:table.cell>
-                    <flux:table.cell class="whitespace-normal">{{ $item->subcategoria->subcategoria ?? 'N/A' }}</flux:table.cell>
-                    {{-- <flux:table.cell class="whitespace-normal">{{ $item->rubros_becario->isNotEmpty() ? $item->rubros_becario->first()->actividades_a_desarrollar : 'No' }}</flux:table.cell> --}}
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->id }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->anteproyecto->ejercicio->ejercicio ?? 'N/A' }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->anteproyecto->usuario->detalle->nombres ?? 'N/A' }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->subcategoria->categoria->rubro->titulo ?? 'N/A' }}</flux:table.cell>
+                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->subcategoria->subcategoria ?? 'N/A' }}</flux:table.cell>
+                    {{-- <flux:table.cell class="!whitespace-normal break-words">{{ $item->rubros_becario->isNotEmpty() ? $item->rubros_becario->first()->actividades_a_desarrollar : 'No' }}</flux:table.cell> --}}
                 </flux:table.row>
             @endforeach
         </flux:table.rows>
