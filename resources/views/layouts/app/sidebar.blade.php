@@ -11,7 +11,7 @@
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
-                <flux:sidebar.group :heading="__('Platform')" class="grid">
+                <flux:sidebar.group :heading="__('Menú')" class="grid">
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Inicio') }}
                     </flux:sidebar.item>
@@ -101,7 +101,7 @@
 
                     <flux:menu.radio.group>
                         <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate>
-                            {{ __('Configuración') }}
+                            {{ __('Settings') }}
                         </flux:menu.item>
                     </flux:menu.radio.group>
 
@@ -116,7 +116,7 @@
                             class="w-full cursor-pointer"
                             data-test="logout-button"
                         >
-                            {{ __('Cerrar sesión') }}
+                            {{ __('Logout') }}
                         </flux:menu.item>
                     </form>
                 </flux:menu>

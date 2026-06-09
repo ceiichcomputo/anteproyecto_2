@@ -63,7 +63,7 @@ new #[Title('Security settings')] class extends Component {
 
         $this->reset('current_password', 'password', 'password_confirmation');
 
-        Flux::toast(variant: 'success', text: __('Password updated.'));
+        Flux::toast(variant: 'success', text: __('Contraseña actualizada.'));
     }
 
     /**
@@ -91,11 +91,11 @@ new #[Title('Security settings')] class extends Component {
 
     <flux:heading class="sr-only">{{ __('Security settings') }}</flux:heading>
 
-    <x-pages::settings.layout :heading="__('Update password')" :subheading="__('Ensure your account is using a long, random password to stay secure')">
+    <x-pages::settings.layout :heading="__('Actualizar contraseña')" :subheading="__('Asegúrate de que tu cuenta esté usando una contraseña larga y aleatoria para mantenerla segura')">
         <form method="POST" wire:submit="updatePassword" class="mt-6 space-y-6">
             <flux:input
                 wire:model="current_password"
-                :label="__('Current password')"
+                :label="__('Contraseña actual')"
                 type="password"
                 required
                 autocomplete="current-password"
@@ -103,7 +103,7 @@ new #[Title('Security settings')] class extends Component {
             />
             <flux:input
                 wire:model="password"
-                :label="__('New password')"
+                :label="__('Nueva contraseña')"
                 type="password"
                 required
                 autocomplete="new-password"
@@ -111,7 +111,7 @@ new #[Title('Security settings')] class extends Component {
             />
             <flux:input
                 wire:model="password_confirmation"
-                :label="__('Confirm password')"
+                :label="__('Confirmar contraseña')"
                 type="password"
                 required
                 autocomplete="new-password"
@@ -120,12 +120,12 @@ new #[Title('Security settings')] class extends Component {
 
             <div class="flex items-center gap-4">
                 <flux:button variant="primary" type="submit" data-test="update-password-button">
-                    {{ __('Save') }}
+                    {{ __('Guardar') }}
                 </flux:button>
             </div>
         </form>
 
-        @if ($canManageTwoFactor)
+        {{-- @if ($canManageTwoFactor)
             <section class="mt-12">
                 <flux:heading>{{ __('Two-factor authentication') }}</flux:heading>
                 <flux:subheading>{{ __('Manage your two-factor authentication settings') }}</flux:subheading>
@@ -168,6 +168,6 @@ new #[Title('Security settings')] class extends Component {
                     @endif
                 </div>
             </section>
-        @endif
+        @endif --}}
     </x-pages::settings.layout>
 </section>

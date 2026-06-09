@@ -353,7 +353,7 @@ new class extends Component
     </form>
     <div class="mb-3">
         <flux:button type="button" wire:click="exportarExcel">Exportar Excel</flux:button>
-        <flux:button type="button" wire:click="exportarPdf">Exportar PDF</flux:button>
+        {{-- <flux:button type="button" wire:click="exportarPdf">Exportar PDF</flux:button> --}}
     </div>
     <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
         <flux:table.columns>
