@@ -210,7 +210,7 @@ new class extends Component
             <flux:table.column>ID</flux:table.column>
             <flux:table.column>Rubro</flux:table.column>
             <flux:table.column>Subcategoría</flux:table.column>
-            <flux:table.column>Monto Estimado</flux:table.column>
+            <flux:table.column>Presupuesto Estimado</flux:table.column>
             <flux:table.column>Acciones</flux:table.column>
         </flux:table.columns>
 

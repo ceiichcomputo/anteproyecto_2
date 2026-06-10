@@ -75,7 +75,7 @@ new class extends Component
             $this->catCategorias = collect();
 
             ///BAMS TODO
-            ///Si ya existe un rubro, buscar la subcategoría seleccionada y cargar su monto estimado
+            ///Si ya existe un rubro, buscar la subcategoría seleccionada y cargar su presupuesto estimado
             ///A partir de la subcategoría, seleccionar la categoria de la lista.
             if($rubro_id){
                 $this->objAnteproyectoRubro = TAnteproyectosRubro::findOrFail($rubro_id);

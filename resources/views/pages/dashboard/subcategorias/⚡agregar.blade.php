@@ -21,8 +21,8 @@ new class extends Component
     #[Validate('boolean')]
     public $requiere_comentarios = false;
 
-    #[Validate('required', message: 'Favor de ingresar el monto estimado')]
-    #[Validate('gt:0', message: 'El monto estimado debe ser mayor a $0')]
+    #[Validate('required', message: 'Favor de ingresar el presupuesto estimado')]
+    #[Validate('gt:0', message: 'El presupuesto estimado debe ser mayor a $0')]
     public $monto_estimado = 0;
 
 
@@ -115,10 +115,10 @@ new class extends Component
     <form wire:submit.prevent="submit" class="my-6 w-full space-y-6">
         <flux:input label="Subcategoría" type="text" wire:model="subcategoria" />
         <flux:textarea label="Descripción" wire:model="descripcion" />
-        <flux:checkbox label="Mostrar monto estimado" wire:model="mostrar_monto_estimado" />
-        <flux:checkbox label="Modificar monto estimado" wire:model="modificar_monto_estimado" />
+        <flux:checkbox label="Mostrar presupuesto estimado" wire:model="mostrar_monto_estimado" />
+        <flux:checkbox label="Modificar presupuesto estimado" wire:model="modificar_monto_estimado" />
         <flux:checkbox label="Requiere comentarios" wire:model="requiere_comentarios" />
-        <flux:input label="Monto estimado" step="any" type="number" wire:model="monto_estimado" />
+        <flux:input label="Presupuesto estimado" step="any" type="number" wire:model="monto_estimado" />
         <flux:button variant="primary" type="submit">Guardar</flux:button>
     </form>
 </div>

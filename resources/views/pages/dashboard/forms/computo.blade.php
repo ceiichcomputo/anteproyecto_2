@@ -13,7 +13,7 @@
     </div>
     
     <div>
-        <flux:input label="Monto estimado" :disabled="!$this->modificar_monto_estimado" type="number" wire:model="monto_estimado" />
+        <flux:input label="Presupuesto estimado" :disabled="!$this->modificar_monto_estimado" type="number" wire:model="monto_estimado" />
     </div>
 
 </div>

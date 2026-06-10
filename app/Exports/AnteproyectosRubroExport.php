@@ -79,7 +79,7 @@ class AnteproyectosRubroExport implements FromCollection, WithHeadings
             'Rubro',
             'Categoría',
             'Subcategoría',
-            'Monto Estimado',
+            'Presupuesto Estimado',
             'Usado',
             'Becarios_Actividades_a_Desarrollar',
             'Becarios_Nombre_Becario',
