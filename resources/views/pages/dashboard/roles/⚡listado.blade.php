@@ -69,7 +69,7 @@ new class extends Component
             <flux:button type="button" wire:click="resetSearch">Limpiar</flux:button>
         </flux:input.group>
     </form>
-    <flux:table class="table w-full">
+    <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
         <flux:table.columns>
             <flux:table.column>ID</flux:table.column>
             <flux:table.column>Nombre</flux:table.column>

@@ -152,7 +152,9 @@ new class extends Component
 
     private function buildQuery()
     {
-        $query = TAnteproyectosRubro::with('subcategoria.categoria.rubro')->orderBy(
+        $query = TAnteproyectosRubro::with('subcategoria.categoria.rubro')->whereHas(
+            'anteproyecto', fn ($q) => $q->where('id_usuario', auth()->id())
+        )->orderBy(
         CatRubro::select('titulo')
             ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
             ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
@@ -207,7 +209,7 @@ new class extends Component
     </form>
     <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
         <flux:table.columns>
-            <flux:table.column>ID</flux:table.column>
+            <flux:table.column>#</flux:table.column>
             <flux:table.column>Rubro</flux:table.column>
             <flux:table.column>Subcategoría</flux:table.column>
             <flux:table.column>Presupuesto Estimado</flux:table.column>
@@ -222,7 +224,7 @@ new class extends Component
             <flux:table.rows>
                 @foreach ($this->rubros as $item)
                     <flux:table.row :key="$item->id">
-                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->id }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $loop->iteration }}</flux:table.cell>
                         <flux:table.cell class="!whitespace-normal break-words">{{ $item->subcategoria->categoria->rubro->titulo ?? 'N/A' }}</flux:table.cell>
                         <flux:table.cell class="!whitespace-normal break-words">{{ $item->subcategoria->subcategoria ?? 'N/A' }}</flux:table.cell>
                         <flux:table.cell class="!whitespace-normal break-words">{{ $item->monto_estimado }}</flux:table.cell>

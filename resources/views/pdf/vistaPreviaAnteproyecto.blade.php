@@ -40,7 +40,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>#</th>
                         <th>Ejercicio</th>
                         <th>Rubro</th>
                         <th>Categoría</th>
@@ -49,7 +49,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ $anteproyecto->id }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $anteproyecto->anteproyecto->ejercicio->ejercicio  }}</td>
                         <td>{{ $anteproyecto->subcategoria->categoria->rubro->titulo }}</td>
                         <td>{{ $anteproyecto->subcategoria->categoria->categoria }}</td>
