@@ -5,6 +5,7 @@ use Livewire\Attributes\Validate;
 use App\Models\CatCategoria;
 use App\Models\TAnteproyectos;
 use App\Models\CatEjercicio;
+use App\Services\CatEjercicioService;
 
 new class extends Component
 {
@@ -20,19 +21,12 @@ new class extends Component
 
 
     function submit() {
+        $service = app(CatEjercicioService::class);
 
         $this->validate();
 
         // VALIDAR DUPLICADO
-        $existe = TAnteproyectos::where(
-                'id_usuario',
-                auth()->id()
-            )
-            ->where(
-                'id_ejercicio',
-                $this->id_ejercicio
-            )
-            ->exists();
+        $existe = $service->ValidaSiExisteParaUsuario($this->id_ejercicio, auth()->id());
 
         if ($existe) {
 
@@ -87,7 +81,7 @@ new class extends Component
             <flux:select.option value="">Selecciona el ejercicio</flux:select.option>
                 @foreach($anios as $anio)
                     <flux:select.option value="{{ $anio->id }}">
-                        {{ $anio->ejercicio }}
+                        {{ $anio->ejercicio. '- Inicia captura: ' . $anio->fecha_captura_inicio . '- Termina captura: ' .$anio->fecha_captura_fin}}
                     </flux:select.option>
                 @endforeach
         </flux:select>

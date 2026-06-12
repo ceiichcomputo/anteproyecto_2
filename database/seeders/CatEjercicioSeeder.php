@@ -16,6 +16,8 @@ class CatEjercicioSeeder extends Seeder
         CatEjercicio::create([
             'ejercicio' => '2027',
             'usuario_ins' => 1,
+            'fecha_captura_inicio' => '2026-06-15',
+            'fecha_captura_fin' => '2026-06-19',
         ]);
     }
 }

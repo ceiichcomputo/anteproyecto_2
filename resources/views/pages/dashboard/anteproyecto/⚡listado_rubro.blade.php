@@ -8,6 +8,8 @@ use App\Models\CatEjercicio;
 use App\Models\CatRubro;
 use App\Models\TAnteproyectosRubro;
 use App\Livewire\Traits\WithPermissions;
+use Carbon\Carbon;
+use App\Services\AnteproyectoRubroService;
 
 new class extends Component
 {
@@ -18,9 +20,12 @@ new class extends Component
     public $anteproyecto;
     public $ejercicio;
     public $anteproyectosRubros = [];
+    public $boolSiSePuedeAgregar = true;
+
 
     public function mount(?int $anteproyecto_id = null)
     {
+        $service = app(AnteproyectoRubroService::class);
         $this->checkPermission('anteproyecto.listar');
 
         if($anteproyecto_id){
@@ -34,7 +39,13 @@ new class extends Component
             session()->flash('error', 'Por alguna razón, este Anteproyecto no te pertenece.');
             return $this->redirect('/dashboard');
         }
-        
+        $this->boolSiSePuedeAgregar = $service->ValidaSiSePuedeAgregar($this->anteproyecto);
+        // try{
+        //     $service->ValidaSiSePuedeAgregar($this->anteproyecto);
+        // }
+        // catch(Exception $e){
+        //     $this->boolSiSePuedeAgregar = false;
+        // }
 
     }
     
@@ -153,34 +164,58 @@ new class extends Component
     private function buildQuery()
     {
         $query = TAnteproyectosRubro::with('subcategoria.categoria.rubro')->whereHas(
-            'anteproyecto', fn ($q) => $q->where('id_usuario', auth()->id())
-        )->orderBy(
-        CatRubro::select('titulo')
-            ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
-            ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
-            ->whereColumn(
-                'cat_subcategorias.id',
-                't_anteproyectos_rubros.id_cat_subcategoria'
-            )
-            ->limit(1)
-    );        
+                'anteproyecto', fn ($q) => $q->where('id_usuario', auth()->id())
+            )->orderBy(
+            CatRubro::select('titulo')
+                ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+                ->join('cat_subcategorias', 'cat_subcategorias.id_categoria', '=', 'cat_categorias.id')
+                ->whereColumn(
+                    'cat_subcategorias.id',
+                    't_anteproyectos_rubros.id_cat_subcategoria'
+                )
+                ->limit(1)
+        );        
 
         return $query;
     }
+
+    // private function ValidaSiSePuedeAgregar()
+    // {
+    //     $fechaInicio = Carbon::parse($this->anteproyecto->ejercicio->fecha_captura_inicio);
+    //     $fechaFin = Carbon::parse($this->anteproyecto->ejercicio->fecha_captura_fin);
+
+    //     if($this->anteproyecto->enviado == 1){
+    //         $this->boolSiSePuedeAgregar = false;
+    //         return false;
+    //     } 
+    //     if (!Carbon::now('America/Mexico_City')->betweenIncluded($fechaInicio, $fechaFin)) {
+    //         // La fecha de hoy se encuentra entre el rango
+    //         $this->boolSiSePuedeAgregar = false;
+    //         return false;
+    //     }
+    // }
 
 
 };
 ?>
 <div>
     <div class="relative mb-6 w-full">
-        <flux:heading size="xl" level="1">{{ __('Anteproyecto del ejercicio: ' . $this->ejercicio) }}</flux:heading>
+        <flux:heading size="xl" level="1">{{ __('Anteproyecto del ejercicio: ' . $this->ejercicio ) }}</flux:heading>
         <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
         <flux:button type="button" wire:click="regresar">Regresar</flux:button>
-        @if($this->anteproyecto->enviado == 0)
+        @if($this->boolSiSePuedeAgregar)
             <flux:button type="button" wire:click="agregar">Agregar Rubros</flux:button>
+        @else
+            <p> </p>
         @endif
         <flux:separator variant="subtle" />
+         <p></p>
     </div>
+    @error('error')
+        <div class="text-red-500">
+            {{ $message }}
+        </div>
+    @enderror
 
     @if (session()->has('success'))
         <div
@@ -216,9 +251,9 @@ new class extends Component
             <flux:table.column>Acciones</flux:table.column>
         </flux:table.columns>
 
-        @if(!$this->rubros)
+        @if($this->rubros->count() < 1)
             <flux:table.row>
-                <flux:table.cell colspan="5" class="text-center">No se encontraron rubros.</flux:table.cell>
+                <flux:table.cell colspan="5" class="text-center">Sin registros, debes de agregar los rubros.</flux:table.cell>
             </flux:table.row>
         @else
             <flux:table.rows>

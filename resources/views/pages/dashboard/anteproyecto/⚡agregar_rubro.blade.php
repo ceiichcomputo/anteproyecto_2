@@ -23,6 +23,7 @@ use App\Models\TAnteproyectosRubrosInvitados;
 use App\Models\TAnteproyectosRubrosOtrPets;
 use App\Models\TAnteproyectosRubrosPromos;
 use App\Models\TAnteproyectosRubrosViajes;
+use App\Services\AnteproyectoRubroService;
 
 new class extends Component
 {
@@ -62,9 +63,14 @@ new class extends Component
         if($anteproyecto_id){
 
             $this->objAnteproyecto = TAnteproyectos::findOrFail($anteproyecto_id);
+
+            if($this->objAnteproyecto->id_usuario != auth()->id()){
+
+                session()->flash('error', 'Por alguna razón, este Anteproyecto no te pertenece.');
+                return $this->redirect('/dashboard');
+            }
+
             $this->ejercicio = $this->objAnteproyecto->ejercicio->ejercicio;
-
-
             $this->cat_tipo_financiamientos = CatTipoFinanciamiento::orderBy('tipo_financiamiento', 'asc')->get();
             $this->cat_tipo_solicitudes = CatTipoSolicitudes::orderBy('tipo_solicitud', 'asc')->get();
             $this->cat_categoria_academicas = CatCategoriaAcademicas::orderBy('categoria_academica', 'asc')->get();
@@ -803,114 +809,124 @@ new class extends Component
     }
 
     private function validaciones(){
-        switch ($this->selectedRubro) {
 
-            case '1': //Becarios
+        $service = app(AnteproyectoRubroService::class);
 
-                $this->validate([
-                    'actividades_a_desarrollar' => 'required|string|max:255','nombre_becario' => 'required|string|max:255', 'fecha_inicio' => 'required|date', 'fecha_final' => 'required|date'
-                ],[
-                'actividades_a_desarrollar.required' => 'Favor de ingresar las actividades a desarrollar',
-                'actividades_a_desarrollar.max' => 'La longitud máxima de las actividades a desarrollar es de 255 caracteres',
-                'nombre_becario.required' => 'Favor de ingresar el nombre del becario',
-                'nombre_becario.max' => 'La longitud máxima del nombre del becario es de 255 caracteres',
-                'fecha_inicio.required' => 'Favor de ingresar la fecha de inicio',
-                'fecha_final.required' => 'Favor de ingresar la fecha de finalización',
-                ]);
+        if($service->ValidaSiSePuedeAgregar($this->objAnteproyecto))
+        {
+            switch ($this->selectedRubro) {
 
-                break;
-                
-            case '2': //Computo
+                case '1': //Becarios
 
-                $this->validate([
-                    'justificacion_objeto_comprar' => 'required|string|max:255'
-                ],[
-                'justificacion_objeto_comprar.required' => 'Favor de ingresar la justificación del objeto a comprar',
-                'justificacion_objeto_comprar.max' => 'La longitud máxima de la justificación del objeto a comprar es de 255 caracteres',
-                ]);
+                    $this->validate([
+                        'actividades_a_desarrollar' => 'required|string|max:255','nombre_becario' => 'required|string|max:255', 'fecha_inicio' => 'required|date', 'fecha_final' => 'required|date'
+                    ],[
+                    'actividades_a_desarrollar.required' => 'Favor de ingresar las actividades a desarrollar',
+                    'actividades_a_desarrollar.max' => 'La longitud máxima de las actividades a desarrollar es de 255 caracteres',
+                    'nombre_becario.required' => 'Favor de ingresar el nombre del becario',
+                    'nombre_becario.max' => 'La longitud máxima del nombre del becario es de 255 caracteres',
+                    'fecha_inicio.required' => 'Favor de ingresar la fecha de inicio',
+                    'fecha_final.required' => 'Favor de ingresar la fecha de finalización',
+                    ]);
 
-                break;
-                
-            case '3': //Eventos
+                    break;
+                    
+                case '2': //Computo
 
-                $this->validate([
-                    'nombre_evento' => 'required|string', 'descripcion_evento' => 'required|string', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
-                ],[
-                'nombre_evento.required' => 'Favor de ingresar el nombre del evento',
-                'descripcion_evento.required' => 'Favor de ingresar la descripción del evento',
-                'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
-                'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
-                ]);
+                    $this->validate([
+                        'justificacion_objeto_comprar' => 'required|string|max:255'
+                    ],[
+                    'justificacion_objeto_comprar.required' => 'Favor de ingresar la justificación del objeto a comprar',
+                    'justificacion_objeto_comprar.max' => 'La longitud máxima de la justificación del objeto a comprar es de 255 caracteres',
+                    ]);
 
-                break;
-                
-            case '4': //Financiamiento externo
+                    break;
+                    
+                case '3': //Eventos
 
-                $this->validate([
-                    'selected_tipo_financiamiento' => 'required', 'titulo_proyecto' => 'required|string', 'nombre_dependencia' => 'required|string', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
-                ],[
-                'selected_tipo_financiamiento.required' => 'Favor de seleccionar el tipo de financiamiento',
-                'titulo_proyecto.required' => 'Favor de ingresar el título del proyecto',
-                'nombre_dependencia.required' => 'Favor de ingresar el nombre de la dependencia',
-                'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
-                'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
-                ]);
+                    $this->validate([
+                        'nombre_evento' => 'required|string', 'descripcion_evento' => 'required|string', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
+                    ],[
+                    'nombre_evento.required' => 'Favor de ingresar el nombre del evento',
+                    'descripcion_evento.required' => 'Favor de ingresar la descripción del evento',
+                    'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
+                    'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
+                    ]);
 
-                break;
-                
-            case '5': //Invitados
+                    break;
+                    
+                case '4': //Financiamiento externo
 
-                $this->validate([
-                    'actividades_a_desarrollar' => 'required|string', 'descripcion_evento' => 'required|string', 'nombre_invitado' => 'required|string', 'procedencia_invitado' => 'required|string', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
-                ],[
-                'actividades_a_desarrollar.required' => 'Favor de ingresar las actividades a desarrollar',
-                'descripcion_evento.required' => 'Favor de ingresar la descripción del evento',
-                'nombre_invitado.required' => 'Favor de ingresar el nombre del invitado',
-                'procedencia_invitado.required' => 'Favor de ingresar la procedencia del invitado',
-                'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
-                'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
-                ]);
+                    $this->validate([
+                        'selected_tipo_financiamiento' => 'required', 'titulo_proyecto' => 'required|string', 'nombre_dependencia' => 'required|string', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
+                    ],[
+                    'selected_tipo_financiamiento.required' => 'Favor de seleccionar el tipo de financiamiento',
+                    'titulo_proyecto.required' => 'Favor de ingresar el título del proyecto',
+                    'nombre_dependencia.required' => 'Favor de ingresar el nombre de la dependencia',
+                    'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
+                    'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
+                    ]);
 
-                break;
-                
-            case '6': //Otras Peticiones
+                    break;
+                    
+                case '5': //Invitados
 
-                $this->validate([
-                    'peticion' => 'required|string'
-                ],[
-                    'peticion.required' => 'Favor de ingresar la petición'
-                ]);
+                    $this->validate([
+                        'actividades_a_desarrollar' => 'required|string', 'descripcion_evento' => 'required|string', 'nombre_invitado' => 'required|string', 'procedencia_invitado' => 'required|string', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
+                    ],[
+                    'actividades_a_desarrollar.required' => 'Favor de ingresar las actividades a desarrollar',
+                    'descripcion_evento.required' => 'Favor de ingresar la descripción del evento',
+                    'nombre_invitado.required' => 'Favor de ingresar el nombre del invitado',
+                    'procedencia_invitado.required' => 'Favor de ingresar la procedencia del invitado',
+                    'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
+                    'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
+                    ]);
 
-                break;
-                
-            case '7': //Promociones
+                    break;
+                    
+                case '6': //Otras Peticiones
 
-                $this->validate([
-                    'selected_tipo_solicitud' => 'required', 'selected_categoria_academica' => 'required', 'descripcion_promocion' => 'required|string', 'fecha_inicio_promocion' => 'required|date', 'fecha_fin_promocion' => 'required|date'
-                ],[
-                'selected_tipo_solicitud.required' => 'Favor de seleccionar el tipo de solicitud',
-                'selected_categoria_academica.required' => 'Favor de seleccionar la categoría académica',
-                'descripcion_promocion.required' => 'Favor de ingresar la descripción de la promoción',
-                'fecha_inicio_promocion.required' => 'Favor de ingresar la fecha de inicio de la promoción',
-                'fecha_fin_promocion.required' => 'Favor de ingresar la fecha de finalización de la promoción',
-                ]);
+                    $this->validate([
+                        'peticion' => 'required|string'
+                    ],[
+                        'peticion.required' => 'Favor de ingresar la petición'
+                    ]);
 
-                break;
-                
-            case '8': //Viajes
+                    break;
+                    
+                case '7': //Promociones
 
-                $this->validate([
-                    'selectedPais' => 'required', 'selectedEstado' => 'required', 'lugar_institucion' => 'required|string', 'fecha_inicio_viaje' => 'required|date', 'fecha_fin_viaje' => 'required|date'
-                ],[
-                'selectedPais.required' => 'Favor de seleccionar el país',
-                'selectedEstado.required' => 'Favor de seleccionar el estado',
-                'lugar_institucion.required' => 'Favor de ingresar el lugar de la institución',
-                'fecha_inicio_viaje.required' => 'Favor de ingresar la fecha de inicio del viaje',
-                'fecha_fin_viaje.required' => 'Favor de ingresar la fecha de finalización del viaje',
-                ]);
+                    $this->validate([
+                        'selected_tipo_solicitud' => 'required', 'selected_categoria_academica' => 'required', 'descripcion_promocion' => 'required|string', 'fecha_inicio_promocion' => 'required|date', 'fecha_fin_promocion' => 'required|date'
+                    ],[
+                    'selected_tipo_solicitud.required' => 'Favor de seleccionar el tipo de solicitud',
+                    'selected_categoria_academica.required' => 'Favor de seleccionar la categoría académica',
+                    'descripcion_promocion.required' => 'Favor de ingresar la descripción de la promoción',
+                    'fecha_inicio_promocion.required' => 'Favor de ingresar la fecha de inicio de la promoción',
+                    'fecha_fin_promocion.required' => 'Favor de ingresar la fecha de finalización de la promoción',
+                    ]);
 
-                break;
+                    break;
+                    
+                case '8': //Viajes
 
+                    $this->validate([
+                        'selectedPais' => 'required', 'selectedEstado' => 'required', 'lugar_institucion' => 'required|string', 'fecha_inicio_viaje' => 'required|date', 'fecha_fin_viaje' => 'required|date'
+                    ],[
+                    'selectedPais.required' => 'Favor de seleccionar el país',
+                    'selectedEstado.required' => 'Favor de seleccionar el estado',
+                    'lugar_institucion.required' => 'Favor de ingresar el lugar de la institución',
+                    'fecha_inicio_viaje.required' => 'Favor de ingresar la fecha de inicio del viaje',
+                    'fecha_fin_viaje.required' => 'Favor de ingresar la fecha de finalización del viaje',
+                    ]);
+
+                    break;
+
+            }
+        }
+        else{
+            session()->flash('error', "Ya no se puede realizar el guardado de este Rubro porque el Anteproyecto está concluido o se encuentra fuera de tiempo establecido");
+            return false;
         }
         return true;
     }
