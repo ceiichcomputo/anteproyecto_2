@@ -201,13 +201,14 @@ new class extends Component
 <div>
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ __('Anteproyecto del ejercicio: ' . $this->ejercicio ) }}</flux:heading>
-        <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
+        <flux:heading size="xl" class="mb-6">{{ __('Listado de Rubros') }}</flux:heading>
         <flux:button type="button" wire:click="regresar">Regresar</flux:button>
         @if($this->boolSiSePuedeAgregar)
-            <flux:button type="button" wire:click="agregar">Agregar Rubros</flux:button>
+            <flux:button type="button" wire:click="agregar">Agregar nuevo registro</flux:button>
         @else
             <p> </p>
         @endif
+            <p> </p>
         <flux:separator variant="subtle" />
          <p></p>
     </div>
@@ -235,27 +236,29 @@ new class extends Component
         </div>
     @endif
 
-    <form wire:submit="search">
+    {{-- <form wire:submit="search">
         <flux:input.group>
             <flux:input type="text" wire:model="query" size="lg"  />
             <flux:button type="submit">Buscar</flux:button>
             <flux:button type="button" wire:click="resetSearch">Limpiar</flux:button>
         </flux:input.group>
-    </form>
-    <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
-        <flux:table.columns>
-            <flux:table.column>#</flux:table.column>
-            <flux:table.column>Rubro</flux:table.column>
-            <flux:table.column>Subcategoría</flux:table.column>
-            <flux:table.column>Presupuesto Estimado</flux:table.column>
-            <flux:table.column>Acciones</flux:table.column>
-        </flux:table.columns>
-
-        @if($this->rubros->count() < 1)
+    </form> --}}
+    <br>
+    @if($this->rubros->count() < 1)
             <flux:table.row>
-                <flux:table.cell colspan="5" class="text-center">Sin registros, debes de agregar los rubros.</flux:table.cell>
+                <flux:table.cell colspan="5" class="text-center">Sin registros, debes de agregar un nuevo registro.</flux:table.cell>
             </flux:table.row>
-        @else
+    @else
+        <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
+            <flux:table.columns>
+                <flux:table.column>#</flux:table.column>
+                <flux:table.column>Rubro</flux:table.column>
+                <flux:table.column>Subcategoría</flux:table.column>
+                <flux:table.column>Presupuesto Estimado</flux:table.column>
+                <flux:table.column>Acciones</flux:table.column>
+            </flux:table.columns>
+
+            
             <flux:table.rows>
                 @foreach ($this->rubros as $item)
                     <flux:table.row :key="$item->id">
@@ -290,17 +293,19 @@ new class extends Component
                         </flux:table.cell>
                     </flux:table.row>
                 @endforeach
-            </flux:table.rows>
-        @endif
-    </flux:table> 
+            </flux:table.rows>            
+        </flux:table> 
+    @endif
     <br>
     {{ $this->rubros->links() }}
 
     <div class="relative mb-6 w-full">
         <flux:separator variant="subtle" />
-        @if($this->anteproyecto->enviado == 0)
+        @if($this->anteproyecto->enviado == 0 && $this->rubros->count() > 0)
             <flux:button type="button" wire:click="concluir" wire:confirm="¿Desea concluir el anteproyecto y enviarlo? Ya no podrá realizar más cambios. ¿Desea continuar?"> {{ __('Concluir anteproyecto: ' . $this->ejercicio) }}</flux:button>
         @endif
-        <flux:button type="button" wire:click="exportarPdf">Exportar PDF</flux:button>
+        @if($this->rubros->count() > 0)
+            <flux:button type="button" wire:click="exportarPdf">Exportar PDF</flux:button>
+        @endif
     </div>
 </div>

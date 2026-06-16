@@ -27,8 +27,8 @@
         <flux:input type="date" label="Fecha final" :disabled="!$this->pueden_editar" wire:model="fecha_fin_evento" />
     </div>
     
-    <div>
+    {{-- <div>
         <flux:input label="Presupuesto estimado" :disabled="!$this->modificar_monto_estimado" type="number" wire:model="monto_estimado" />
-    </div>
+    </div> --}}
 
 </div>

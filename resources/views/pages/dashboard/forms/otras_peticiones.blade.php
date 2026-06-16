@@ -4,8 +4,8 @@
         <flux:input label="Petición" :disabled="!$this->pueden_editar" type="text" wire:model="peticion" />
     </div>
     
-    <div>
+    {{-- <div>
         <flux:input label="Presupuesto estimado" :disabled="!$this->modificar_monto_estimado" type="number" wire:model="monto_estimado" />
-    </div>
+    </div> --}}
 
 </div>

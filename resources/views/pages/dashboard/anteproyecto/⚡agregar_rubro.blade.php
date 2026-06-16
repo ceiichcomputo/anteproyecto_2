@@ -943,7 +943,7 @@ new class extends Component
 <div>
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ __('Anteproyecto del ejercicio: ' . $this->ejercicio) }}</flux:heading>
-        <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
+        <flux:subheading size="lg" class="mb-6">{{ __('Rubros') }}</flux:subheading>
         <flux:button type="button" wire:click="regresar" wire:confirm="Se perderán todos los cambios, ¿Deseas continuar?">Regresar</flux:button>
         <flux:separator variant="subtle" />
     </div>
@@ -956,96 +956,106 @@ new class extends Component
         </div>
     @endif
 
-        <flux:select label="Rubros" wire:model.live="selectedRubro">
-            <flux:select.option value="">Selecciona el rubro</flux:select.option>
-                @foreach($catRubros as $rubro)
-                    <flux:select.option value="{{ $rubro->id }}">
-                        {{ $rubro->titulo }}
-                    </flux:select.option>
-                @endforeach
-        </flux:select>
+    <div style="display: flex; justify-content: center;">
+        <div style="width: 50%; padding: 1rem;">
 
-        <flux:select label="Categorias" wire:model.live="selectedCategoria">
-            <flux:select.option :disabled="!$this->selectedRubro" value="">Selecciona la categoria</flux:select.option>
-                @foreach($catCategorias as $categoria)
-                    <flux:select.option value="{{ $categoria->id }}">
-                        {{ $categoria->categoria }}
-                    </flux:select.option>
-                @endforeach
-        </flux:select>
-
-        <flux:select label="Subcategorías" wire:model.live="selectedSubCategoria">
-            <flux:select.option :disabled="!$this->selectedCategoria" value="">Selecciona la subcategoria</flux:select.option>
-                @foreach($catSubCategorias as $subcategoria)
-                    <flux:select.option value="{{ $subcategoria->id }}">
-                        {{ $subcategoria->subcategoria }}
-                    </flux:select.option>
-                @endforeach
-        </flux:select>
-
-
-    {{-- FORMULARIOS DINAMICOS --}}
-    <form wire:submit.prevent="submit">
-        @if($selectedRubro == 1 && $selectedSubCategoria)
-            @include(
-                'pages.dashboard.forms.becarios'
-            )
-        @endif
-
-        @if($selectedRubro == 2 && $selectedSubCategoria)
-            @include(
-                'pages.dashboard.forms.computo'
-            )
-        @endif
-
-        @if($selectedRubro == 3 && $selectedSubCategoria)
-            @include(
-                'pages.dashboard.forms.eventos'
-            )
-        @endif
-
-        @if($selectedRubro == 4 && $selectedSubCategoria)
-            @include(
-                'pages.dashboard.forms.financ_externo'
-            )
-        @endif
-
-        @if($selectedRubro == 5 && $selectedSubCategoria)
-            @include(
-                'pages.dashboard.forms.invitados'
-            )
-        @endif
-
-        @if($selectedRubro == 6 && $selectedSubCategoria)
-            @include(
-                'pages.dashboard.forms.otras_peticiones'
-            )
-        @endif
-
-        @if($selectedRubro == 7 && $selectedSubCategoria)
-            @include(
-                'pages.dashboard.forms.promociones'
-            )
-        @endif
-
-        @if($selectedRubro == 8 && $selectedSubCategoria)
-            @include(
-                'pages.dashboard.forms.viajes'
-            )
-        @endif
-
-        {{-- BOTON --}}
-        @if($selectedSubCategoria)
-            <div class="mt-6 flex justify-end">
-                <button
-                    type="submit"
-                    class="bg-blue-500 hover:bg-blue-400 text-gray px-5 py-2 rounded"
-                >
-                    Guardar
-                </button>
+            <div style="background-color: #eae7e0; color: #d04a31; padding: 1rem; justify-content: center;">
+                <h3 style="font-size: 38px;">Nuevo registro</h3>
             </div>
 
-        @endif
+            <flux:select label="Rubros" wire:model.live="selectedRubro">
+                <flux:select.option value="">Selecciona el rubro</flux:select.option>
+                    @foreach($catRubros as $rubro)
+                        <flux:select.option value="{{ $rubro->id }}">
+                            {{ $rubro->titulo }}
+                        </flux:select.option>
+                    @endforeach
+            </flux:select>
 
-    </form>
+            <flux:select label="Categorias" wire:model.live="selectedCategoria">
+                <flux:select.option :disabled="!$this->selectedRubro" value="">Selecciona la categoria</flux:select.option>
+                    @foreach($catCategorias as $categoria)
+                        <flux:select.option value="{{ $categoria->id }}">
+                            {{ $categoria->categoria }}
+                        </flux:select.option>
+                    @endforeach
+            </flux:select>
+
+            <flux:select label="Subcategorías" wire:model.live="selectedSubCategoria">
+                <flux:select.option :disabled="!$this->selectedCategoria" value="">Selecciona la subcategoria</flux:select.option>
+                    @foreach($catSubCategorias as $subcategoria)
+                        <flux:select.option value="{{ $subcategoria->id }}">
+                            {{ $subcategoria->subcategoria }}
+                        </flux:select.option>
+                    @endforeach
+            </flux:select>
+
+
+            {{-- FORMULARIOS DINAMICOS --}}
+            <form wire:submit.prevent="submit">
+                @if($selectedRubro == 1 && $selectedSubCategoria)
+                    @include(
+                        'pages.dashboard.forms.becarios'
+                    )
+                @endif
+
+                @if($selectedRubro == 2 && $selectedSubCategoria)
+                    @include(
+                        'pages.dashboard.forms.computo'
+                    )
+                @endif
+
+                @if($selectedRubro == 3 && $selectedSubCategoria)
+                    @include(
+                        'pages.dashboard.forms.eventos'
+                    )
+                @endif
+
+                @if($selectedRubro == 4 && $selectedSubCategoria)
+                    @include(
+                        'pages.dashboard.forms.financ_externo'
+                    )
+                @endif
+
+                @if($selectedRubro == 5 && $selectedSubCategoria)
+                    @include(
+                        'pages.dashboard.forms.invitados'
+                    )
+                @endif
+
+                @if($selectedRubro == 6 && $selectedSubCategoria)
+                    @include(
+                        'pages.dashboard.forms.otras_peticiones'
+                    )
+                @endif
+
+                @if($selectedRubro == 7 && $selectedSubCategoria)
+                    @include(
+                        'pages.dashboard.forms.promociones'
+                    )
+                @endif
+
+                @if($selectedRubro == 8 && $selectedSubCategoria)
+                    @include(
+                        'pages.dashboard.forms.viajes'
+                    )
+                @endif
+
+                {{-- BOTON --}}
+                @if($selectedSubCategoria)
+                    <div class="mt-6 flex justify-end">
+                        <button
+                            type="submit"
+                            class="bg-blue-500 hover:bg-blue-400 text-gray px-5 py-2 rounded"
+                        >
+                            Guardar
+                        </button>
+                    </div>
+
+                @endif
+
+            </form>
+
+        </div>
+    </div>
 </div>

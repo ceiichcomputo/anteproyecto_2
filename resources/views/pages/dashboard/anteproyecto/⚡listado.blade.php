@@ -50,7 +50,7 @@ new class extends Component
 <div>
     <div class="relative mb-6 w-full">
         <flux:heading size="xl" level="1">{{ __('Anteproyectos') }}</flux:heading>
-        <flux:subheading size="lg" class="mb-6">{{ __('Administrar') }}</flux:subheading>
+        <flux:heading size="xl" class="mb-6">{{ __('Listado de Anteproyectos') }}</flux:heading>
         <flux:button type="button" wire:click="agregar">Agregar Anteproyecto</flux:button>
         <flux:separator variant="subtle" />
     </div>
@@ -64,51 +64,58 @@ new class extends Component
             {{ session('success') }}
         </div>
     @endif
-    <form wire:submit="search">
+    {{-- <form wire:submit="search">
         <flux:input.group>
             <flux:input type="text" wire:model="query" size="lg"  />
             <flux:button type="submit">Buscar</flux:button>
             <flux:button type="button" wire:click="resetSearch">Limpiar</flux:button>
         </flux:input.group>
-    </form>
-    <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
-        <flux:table.columns>
-            <flux:table.column>ID</flux:table.column>
-            <flux:table.column>Ejercicio</flux:table.column>
-            <flux:table.column>Inicia captura</flux:table.column>
-            <flux:table.column>Fin captura</flux:table.column>
-            <flux:table.column>Estatus</flux:table.column>
-            <flux:table.column>Acciones</flux:table.column>
-        </flux:table.columns>
+    </form> --}}
+    @if($this->anteproyectos->count() < 1)
+            <flux:table.row>
+                <flux:table.cell colspan="5" class="text-center">Sin registros, debes de agregar un Anteproyecto.</flux:table.cell>
+            </flux:table.row>
+        @else
+        <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
+            <flux:table.columns>
+                <flux:table.column>ID</flux:table.column>
+                <flux:table.column>Ejercicio</flux:table.column>
+                <flux:table.column>Inicia captura</flux:table.column>
+                <flux:table.column>Fin captura</flux:table.column>
+                <flux:table.column>Estatus</flux:table.column>
+                <flux:table.column>Acciones</flux:table.column>
+            </flux:table.columns>
 
-        <flux:table.rows>
-            @foreach ($this->anteproyectos as $item)
-                <flux:table.row :key="$item->id">
-                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->id }}</flux:table.cell>
-                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->ejercicio->ejercicio }}</flux:table.cell>
-                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->ejercicio->fecha_captura_inicio }}</flux:table.cell>
-                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->ejercicio->fecha_captura_fin }}</flux:table.cell>
-                    <flux:table.cell class="!whitespace-normal break-words">{{ $item->enviado ? 'Enviado' : 'No enviado' }}</flux:table.cell>
-                    <flux:table.cell class="!whitespace-nowrap">
-                        <button
-                            wire:click="editar({{ $item->id }})"
-                            class="bg-blue-500 text-white px-3 py-1 rounded"
-                        >
-                            Ver
-                        </button>
-                        {{-- <button
-                            wire:click="delete({{ $item->id }})"
-                            wire:confirm="¿Deseas eliminar esta categoría académica?"
-                            class="bg-red-500 text-white px-3 py-1 rounded"
-                        >
-                            Eliminar
-                        </button> --}}
+            <flux:table.rows>
+                @foreach ($this->anteproyectos as $item)
+                    <flux:table.row :key="$item->id">
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->id }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->ejercicio->ejercicio }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->ejercicio->fecha_captura_inicio }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->ejercicio->fecha_captura_fin }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-normal break-words">{{ $item->enviado ? 'Enviado' : 'No enviado' }}</flux:table.cell>
+                        <flux:table.cell class="!whitespace-nowrap">
+                            <button
+                                wire:click="editar({{ $item->id }})"
+                                class="bg-blue-500 text-white px-3 py-1 rounded"
+                            >
+                                Ver
+                            </button>
+                            {{-- <button
+                                wire:click="delete({{ $item->id }})"
+                                wire:confirm="¿Deseas eliminar esta categoría académica?"
+                                class="bg-red-500 text-white px-3 py-1 rounded"
+                            >
+                                Eliminar
+                            </button> --}}
 
-                    </flux:table.cell>
-                </flux:table.row>
-            @endforeach
-        </flux:table.rows>
-    </flux:table> 
+                        </flux:table.cell>
+                    </flux:table.row>
+                @endforeach
+            </flux:table.rows>
+        </flux:table> 
+
+    @endif
     <br>
     {{ $this->anteproyectos->links() }}
 </div>

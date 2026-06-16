@@ -11,6 +11,14 @@
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
+                @auth
+                    @role('Académico')
+                        {{ Auth::user()->detalle->apellido_paterno . ' ' . Auth::user()->detalle->apellido_materno . ' ' . Auth::user()->detalle->nombres }} <br>
+                        Departamente
+                        <br>
+                    @endrole
+                @endauth
+
                 <flux:sidebar.group :heading="__('Menú')" class="grid">
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Inicio') }}
