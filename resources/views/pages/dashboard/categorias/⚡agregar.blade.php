@@ -4,9 +4,27 @@ use Livewire\Component;
 use Livewire\Attributes\Validate;
 use App\Models\CatCategoria;
 use App\Models\CatRubro;
+use App\Livewire\Traits\WithPermissions;
 
 new class extends Component
 {
+    use WithPermissions;
+    
+    function mount(?int $rubro_id = null, ?int $id = null){
+
+        $this->checkPermission('catalogos.rubros.editar');
+
+        if($rubro_id){
+            $this->rubro = CatRubro::findOrFail($rubro_id);
+        }
+
+        if($id){
+            $this->objCategoria = CatCategoria::findOrFail($id);
+            $this->categoria = $this->objCategoria->categoria;
+            $this->descripcion = $this->objCategoria->descripcion;
+        }
+    }
+
     #[Validate('required', message: 'Favor de ingresar un título')]
     #[Validate('min:2', message: 'La longitud mínima del título es de 2 caracteres')]
     #[Validate('max:255', message: 'La longitud máxima del título es de 255 caracteres')]
@@ -49,19 +67,6 @@ new class extends Component
         session()->flash('success', $this->mensaje);
  
         return $this->redirect('/dashboard/categorias/rubro/' . $this->rubro->id);
-    }
-
-    function mount(?int $rubro_id = null, ?int $id = null){
-
-        if($rubro_id){
-            $this->rubro = CatRubro::findOrFail($rubro_id);
-        }
-
-        if($id){
-            $this->objCategoria = CatCategoria::findOrFail($id);
-            $this->categoria = $this->objCategoria->categoria;
-            $this->descripcion = $this->objCategoria->descripcion;
-        }
     }
 
     public function regresar()

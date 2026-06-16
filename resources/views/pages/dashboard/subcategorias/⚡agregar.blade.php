@@ -4,9 +4,31 @@ use Livewire\Component;
 use Livewire\Attributes\Validate;
 use App\Models\CatCategoria;
 use App\Models\CatSubcategoria;
+use App\Livewire\Traits\WithPermissions;
 
 new class extends Component
 {
+    use WithPermissions;
+
+    function mount(?int $categoria_id = null, ?int $id = null){
+
+        $this->checkPermission('catalogos.rubros.editar');
+
+        if($categoria_id){
+            $this->categoria = CatCategoria::findOrFail($categoria_id);
+        }
+
+        if($id){
+            $this->objSubcategoria = CatSubcategoria::findOrFail($id);
+            $this->subcategoria = $this->objSubcategoria->subcategoria;
+            $this->descripcion = $this->objSubcategoria->descripcion;
+            // $this->mostrar_monto_estimado = $this->objSubcategoria->mostrar_monto_estimado;
+            // $this->modificar_monto_estimado = $this->objSubcategoria->modificar_monto_estimado;
+            // $this->requiere_comentarios = $this->objSubcategoria->requiere_comentarios;
+            $this->monto_estimado = $this->objSubcategoria->monto_estimado;
+        }
+    }
+
     #[Validate('required', message: 'Favor de ingresar un título')]
     #[Validate('min:2', message: 'La longitud mínima del título es de 2 caracteres')]
     #[Validate('max:255', message: 'La longitud máxima del título es de 255 caracteres')]
@@ -25,9 +47,6 @@ new class extends Component
     #[Validate('gt:0', message: 'El presupuesto estimado debe ser mayor a $0')]
     public $monto_estimado = 0;
 
-
-
-
     public $categoria;
 
     public $objSubcategoria;
@@ -44,9 +63,9 @@ new class extends Component
                 'id_categoria' => $this->categoria->id,
                 'subcategoria' => $this->subcategoria,
                 'descripcion' => $this->descripcion,
-                'mostrar_monto_estimado' => $this->mostrar_monto_estimado,
-                'modificar_monto_estimado' => $this->modificar_monto_estimado,
-                'requiere_comentarios' => $this->requiere_comentarios,
+                'mostrar_monto_estimado' => false,
+                'modificar_monto_estimado' => false,
+                'requiere_comentarios' => false,
                 'monto_estimado' => $this->monto_estimado,
                 'usuario_mod' => auth()->id(),
                 'updated_at' => now()
@@ -57,9 +76,9 @@ new class extends Component
                 'id_categoria' => $this->categoria->id,
                 'subcategoria' => $this->subcategoria,
                 'descripcion' => $this->descripcion,
-                'mostrar_monto_estimado' => $this->mostrar_monto_estimado,
-                'modificar_monto_estimado' => $this->modificar_monto_estimado,
-                'requiere_comentarios' => $this->requiere_comentarios,
+                'mostrar_monto_estimado' => false,
+                'modificar_monto_estimado' => false,
+                'requiere_comentarios' => false,
                 'monto_estimado' => $this->monto_estimado,
                 'usuario_ins' => auth()->id(),
                 'updated_at' => now()
@@ -70,23 +89,6 @@ new class extends Component
         session()->flash('success', $this->mensaje);
  
         return $this->redirect('/dashboard/subcategorias/categorias/' . $this->categoria->id);
-    }
-
-    function mount(?int $categoria_id = null, ?int $id = null){
-
-        if($categoria_id){
-            $this->categoria = CatCategoria::findOrFail($categoria_id);
-        }
-
-        if($id){
-            $this->objSubcategoria = CatSubcategoria::findOrFail($id);
-            $this->subcategoria = $this->objSubcategoria->subcategoria;
-            $this->descripcion = $this->objSubcategoria->descripcion;
-            $this->mostrar_monto_estimado = $this->objSubcategoria->mostrar_monto_estimado;
-            $this->modificar_monto_estimado = $this->objSubcategoria->modificar_monto_estimado;
-            $this->requiere_comentarios = $this->objSubcategoria->requiere_comentarios;
-            $this->monto_estimado = $this->objSubcategoria->monto_estimado;
-        }
     }
 
     public function regresar()
@@ -115,9 +117,6 @@ new class extends Component
     <form wire:submit.prevent="submit" class="my-6 w-full space-y-6">
         <flux:input label="Subcategoría" type="text" wire:model="subcategoria" />
         <flux:textarea label="Descripción" wire:model="descripcion" />
-        <flux:checkbox label="Mostrar presupuesto estimado" wire:model="mostrar_monto_estimado" />
-        <flux:checkbox label="Modificar presupuesto estimado" wire:model="modificar_monto_estimado" />
-        <flux:checkbox label="Requiere comentarios" wire:model="requiere_comentarios" />
         <flux:input label="Presupuesto estimado" step="any" type="number" wire:model="monto_estimado" />
         <flux:button variant="primary" type="submit">Guardar</flux:button>
     </form>

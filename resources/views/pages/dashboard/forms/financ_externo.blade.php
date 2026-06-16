@@ -12,11 +12,11 @@
     </div>
 
     <div>
-        <flux:input label="Título del proyecto" :disabled="!$this->pueden_editar" type="text" wire:model="titulo_proyecto" />
+        <flux:textarea label="Título del proyecto" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="titulo_proyecto" />
     </div>
 
     <div>
-        <flux:input label="Nombre de la dependencia" :disabled="!$this->pueden_editar" type="text" wire:model="nombre_dependencia" />
+        <flux:textarea label="Nombre de la dependencia" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="nombre_dependencia" />
     </div>
 
     <div>

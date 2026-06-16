@@ -1,7 +1,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
     <div>
-        <flux:input label="Petición" :disabled="!$this->pueden_editar" type="text" wire:model="peticion" />
+        <flux:textarea label="Petición" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="peticion" />
     </div>
     
     {{-- <div>

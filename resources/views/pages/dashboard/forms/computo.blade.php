@@ -9,7 +9,7 @@
     </div> --}}
 
     <div>
-        <flux:input label="Justificacion compra" :disabled="!$this->pueden_editar" type="text" wire:model="justificacion_objeto_comprar" />
+        <flux:textarea label="Justificacion compra" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="justificacion_objeto_comprar" />
     </div>
     
     {{-- <div>

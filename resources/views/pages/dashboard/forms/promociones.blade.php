@@ -23,7 +23,7 @@
     </div>
 
     <div>
-        <flux:input label="Descripción promoción" :disabled="!$this->pueden_editar" type="text" wire:model="descripcion_promocion" />
+        <flux:textarea label="Descripción promoción" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="descripcion_promocion" />
     </div>
 
     <div>

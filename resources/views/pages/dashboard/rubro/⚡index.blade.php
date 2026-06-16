@@ -4,11 +4,20 @@ use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\CatRubro;
+use App\Models\CatSubcategoria;
+use App\Exports\CatRubroExport;
+use App\Livewire\Traits\WithPermissions;
 
 new class extends Component
 {
     use WithPagination;
+    use WithPermissions;
     public $query = '';
+
+    public function mount()
+    {
+        $this->checkPermission('catalogos.rubros.listar');
+    }
  
     public function search()
     {
@@ -47,6 +56,51 @@ new class extends Component
     {
         return $this->redirect('/dashboard/rubro/crear');
     }
+
+    public function exportarExcel()
+    {
+
+        $query = $this->buildQuery();
+
+        return Excel::download(
+            new CatRubroExport($query),
+            'rubros.xlsx'
+        );
+    }
+
+    public function exportarPdf()
+    {
+        $anteproyectos = $this->buildQuery()
+            ->with([
+                'subcategoria.categoria.rubro'
+            ])
+            ->get();
+
+        $pdf = Pdf::loadView(
+            'pdf.anteproyectos',
+            compact('rubros')
+        );
+
+        return response()->streamDownload(
+            fn () => print($pdf->output()),
+            'rubros.pdf'
+        );
+    }
+
+    private function buildQuery()
+    {
+        $query = CatSubcategoria::with('categoria.rubro')->orderBy(
+            CatRubro::select('titulo')
+                ->join('cat_categorias', 'cat_categorias.id_rubro', '=', 'cat_rubros.id')
+                ->whereColumn(
+                    'cat_categorias.id',
+                    'cat_subcategorias.id_categoria'
+                )
+                ->limit(1)
+        );
+
+        return $query;
+    }
 };
 ?>
 <div>
@@ -73,6 +127,12 @@ new class extends Component
             <flux:button type="button" wire:click="resetSearch">Limpiar</flux:button>
         </flux:input.group>
     </form>
+
+    <div class="mb-3">
+        <flux:button type="button" wire:click="exportarExcel">Exportar Excel</flux:button>
+        {{-- <flux:button type="button" wire:click="exportarPdf">Exportar PDF</flux:button> --}}
+    </div>
+
     <flux:table style="table-layout:auto; white-space:normal;" class="w-full">
         <flux:table.columns>
             <flux:table.column>ID</flux:table.column>

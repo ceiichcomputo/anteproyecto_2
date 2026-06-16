@@ -1,11 +1,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
     <div>
-        <flux:input label="Actividades a desarrollar" :disabled="!$this->pueden_editar" type="text" wire:model="actividades_a_desarrollar" />
-    </div>
-
-    <div>
-        <flux:input label="Descripción del evento" :disabled="!$this->pueden_editar" type="text" wire:model="descripcion_evento" />
+        <flux:textarea label="Descripción del evento" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="descripcion_evento" />
     </div>
 
     <div>
@@ -13,7 +9,11 @@
     </div>
 
     <div>
-        <flux:input label="Procedencia Invitado" :disabled="!$this->pueden_editar" type="text" wire:model="procedencia_invitado" />
+        <flux:textarea label="Procedencia Invitado" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="procedencia_invitado" />
+    </div>
+
+    <div>
+        <flux:textarea label="Actividades a desarrollar" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="actividades_a_desarrollar" />
     </div>
 
     <div>

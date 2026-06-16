@@ -3,9 +3,23 @@
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 use App\Models\CatRubro;
+use App\Livewire\Traits\WithPermissions;
 
 new class extends Component
 {
+    use WithPermissions;
+
+    function mount(?int $id = null){
+
+        $this->checkPermission('catalogos.rubros.editar');
+
+        if($id){
+            $this->rubro = CatRubro::findOrFail($id);
+            $this->titulo = $this->rubro->titulo;
+            $this->descripcion = $this->rubro->descripcion;
+        }
+    }
+
     #[Validate('required', message: 'Favor de ingresar un título')]
     #[Validate('min:2', message: 'La longitud mínima del título es de 2 caracteres')]
     #[Validate('max:255', message: 'La longitud máxima del título es de 255 caracteres')]
@@ -45,14 +59,6 @@ new class extends Component
         return $this->redirect('/dashboard/rubro');
 
         // dd($this->titulo);
-    }
-
-    function mount(?int $id = null){
-        if($id){
-            $this->rubro = CatRubro::findOrFail($id);
-            $this->titulo = $this->rubro->titulo;
-            $this->descripcion = $this->rubro->descripcion;
-        }
     }
 
     public function regresar()

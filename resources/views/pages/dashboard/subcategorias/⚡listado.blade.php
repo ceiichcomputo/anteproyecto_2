@@ -17,7 +17,7 @@ new class extends Component
 
     public function mount(?int $categoria_id = null)
     {
-        $this->checkPermission('catalogos.categorias.listar');
+        $this->checkPermission('catalogos.rubros.listar');
 
         if($categoria_id){
             $this->categoria = CatCategoria::findOrFail($categoria_id);

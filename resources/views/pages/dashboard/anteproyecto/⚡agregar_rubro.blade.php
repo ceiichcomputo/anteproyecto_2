@@ -819,10 +819,10 @@ new class extends Component
                 case '1': //Becarios
 
                     $this->validate([
-                        'actividades_a_desarrollar' => 'required|string|max:255','nombre_becario' => 'required|string|max:255', 'fecha_inicio' => 'required|date', 'fecha_final' => 'required|date'
+                        'actividades_a_desarrollar' => 'required|string|max:3000','nombre_becario' => 'required|string|max:255', 'fecha_inicio' => 'required|date', 'fecha_final' => 'required|date'
                     ],[
                     'actividades_a_desarrollar.required' => 'Favor de ingresar las actividades a desarrollar',
-                    'actividades_a_desarrollar.max' => 'La longitud máxima de las actividades a desarrollar es de 255 caracteres',
+                    'actividades_a_desarrollar.max' => 'La longitud máxima de las actividades a desarrollar es de 3000 caracteres',
                     'nombre_becario.required' => 'Favor de ingresar el nombre del becario',
                     'nombre_becario.max' => 'La longitud máxima del nombre del becario es de 255 caracteres',
                     'fecha_inicio.required' => 'Favor de ingresar la fecha de inicio',
@@ -834,10 +834,10 @@ new class extends Component
                 case '2': //Computo
 
                     $this->validate([
-                        'justificacion_objeto_comprar' => 'required|string|max:255'
+                        'justificacion_objeto_comprar' => 'required|string|max:3000'
                     ],[
                     'justificacion_objeto_comprar.required' => 'Favor de ingresar la justificación del objeto a comprar',
-                    'justificacion_objeto_comprar.max' => 'La longitud máxima de la justificación del objeto a comprar es de 255 caracteres',
+                    'justificacion_objeto_comprar.max' => 'La longitud máxima de la justificación del objeto a comprar es de 3000 caracteres',
                     ]);
 
                     break;
@@ -845,10 +845,12 @@ new class extends Component
                 case '3': //Eventos
 
                     $this->validate([
-                        'nombre_evento' => 'required|string', 'descripcion_evento' => 'required|string', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
+                        'nombre_evento' => 'required|string|max:1000', 'descripcion_evento' => 'required|string|max:1000', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
                     ],[
                     'nombre_evento.required' => 'Favor de ingresar el nombre del evento',
+                    'nombre_evento.max' => 'La longitud máxima del nombre del evento es de 1000 caracteres',
                     'descripcion_evento.required' => 'Favor de ingresar la descripción del evento',
+                    'descripcion_evento.max' => 'La longitud máxima de la descripción del evento es de 1000 caracteres',
                     'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
                     'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
                     ]);
@@ -858,11 +860,13 @@ new class extends Component
                 case '4': //Financiamiento externo
 
                     $this->validate([
-                        'selected_tipo_financiamiento' => 'required', 'titulo_proyecto' => 'required|string', 'nombre_dependencia' => 'required|string', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
+                        'selected_tipo_financiamiento' => 'required', 'titulo_proyecto' => 'required|string|max:1000', 'nombre_dependencia' => 'required|string|max:1000', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
                     ],[
                     'selected_tipo_financiamiento.required' => 'Favor de seleccionar el tipo de financiamiento',
                     'titulo_proyecto.required' => 'Favor de ingresar el título del proyecto',
+                    'titulo_proyecto.max' => 'La longitud máxima del título del proyecto es de 1000 caracteres',
                     'nombre_dependencia.required' => 'Favor de ingresar el nombre de la dependencia',
+                    'nombre_dependencia.max' => 'La longitud máxima del nombre de la dependencia es de 1000 caracteres',
                     'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
                     'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
                     ]);
@@ -872,12 +876,16 @@ new class extends Component
                 case '5': //Invitados
 
                     $this->validate([
-                        'actividades_a_desarrollar' => 'required|string', 'descripcion_evento' => 'required|string', 'nombre_invitado' => 'required|string', 'procedencia_invitado' => 'required|string', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
+                        'actividades_a_desarrollar' => 'required|string|max:3000', 'descripcion_evento' => 'required|string|max:3000', 'nombre_invitado' => 'required|string|max:1000', 'procedencia_invitado' => 'required|string|max:1000', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
                     ],[
                     'actividades_a_desarrollar.required' => 'Favor de ingresar las actividades a desarrollar',
+                    'actividades_a_desarrollar.max' => 'La longitud máxima de las actividades a desarrollar es de 3000 caracteres',
                     'descripcion_evento.required' => 'Favor de ingresar la descripción del evento',
+                    'descripcion_evento.max' => 'La longitud máxima de la descripción del evento es de 3000 caracteres',
                     'nombre_invitado.required' => 'Favor de ingresar el nombre del invitado',
+                    'nombre_invitado.max' => 'La longitud máxima del nombre del invitado es de 1000 caracteres',
                     'procedencia_invitado.required' => 'Favor de ingresar la procedencia del invitado',
+                    'procedencia_invitado.max' => 'La longitud máxima de la procedencia del invitado es de 1000 caracteres',
                     'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
                     'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
                     ]);
@@ -887,9 +895,10 @@ new class extends Component
                 case '6': //Otras Peticiones
 
                     $this->validate([
-                        'peticion' => 'required|string'
+                        'peticion' => 'required|string|max:1000'
                     ],[
-                        'peticion.required' => 'Favor de ingresar la petición'
+                    'peticion.required' => 'Favor de ingresar la petición',
+                    'peticion.max' => 'La longitud máxima de la petición es de 3000 caracteres',
                     ]);
 
                     break;
@@ -897,11 +906,12 @@ new class extends Component
                 case '7': //Promociones
 
                     $this->validate([
-                        'selected_tipo_solicitud' => 'required', 'selected_categoria_academica' => 'required', 'descripcion_promocion' => 'required|string', 'fecha_inicio_promocion' => 'required|date', 'fecha_fin_promocion' => 'required|date'
+                        'selected_tipo_solicitud' => 'required', 'selected_categoria_academica' => 'required', 'descripcion_promocion' => 'required|string|max:1000', 'fecha_inicio_promocion' => 'required|date', 'fecha_fin_promocion' => 'required|date'
                     ],[
                     'selected_tipo_solicitud.required' => 'Favor de seleccionar el tipo de solicitud',
                     'selected_categoria_academica.required' => 'Favor de seleccionar la categoría académica',
                     'descripcion_promocion.required' => 'Favor de ingresar la descripción de la promoción',
+                    'descripcion_promocion.max' => 'La longitud máxima de la descripción de la promoción es de 3000 caracteres',
                     'fecha_inicio_promocion.required' => 'Favor de ingresar la fecha de inicio de la promoción',
                     'fecha_fin_promocion.required' => 'Favor de ingresar la fecha de finalización de la promoción',
                     ]);
@@ -911,11 +921,12 @@ new class extends Component
                 case '8': //Viajes
 
                     $this->validate([
-                        'selectedPais' => 'required', 'selectedEstado' => 'required', 'lugar_institucion' => 'required|string', 'fecha_inicio_viaje' => 'required|date', 'fecha_fin_viaje' => 'required|date'
+                        'selectedPais' => 'required', 'selectedEstado' => 'required', 'lugar_institucion' => 'required|string|max:255', 'fecha_inicio_viaje' => 'required|date', 'fecha_fin_viaje' => 'required|date'
                     ],[
                     'selectedPais.required' => 'Favor de seleccionar el país',
                     'selectedEstado.required' => 'Favor de seleccionar el estado',
                     'lugar_institucion.required' => 'Favor de ingresar el lugar de la institución',
+                    'descripcion_promocion.max' => 'La longitud máxima del lugar de la institución es de 255 caracteres',
                     'fecha_inicio_viaje.required' => 'Favor de ingresar la fecha de inicio del viaje',
                     'fecha_fin_viaje.required' => 'Favor de ingresar la fecha de finalización del viaje',
                     ]);

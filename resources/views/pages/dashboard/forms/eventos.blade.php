@@ -1,11 +1,11 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
     <div>
-        <flux:input label="Nombre del evento" :disabled="!$this->pueden_editar" type="text" wire:model="nombre_evento" />
+        <flux:textarea label="Nombre del evento" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="nombre_evento" />
     </div>
 
     <div>
-        <flux:input label="Descripción del evento" :disabled="!$this->pueden_editar" type="text" wire:model="descripcion_evento" />
+        <flux:textarea label="Descripción del evento" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="descripcion_evento" />
     </div>
 
     <div>

@@ -43,7 +43,7 @@
                             {{ __('Permisos') }}
                         </flux:sidebar.item>
                     @endcan
-                    @can('admin.usuarios.listar')
+                    @can('catalogos.rubros.listar')
                         <flux:sidebar.item icon="home" :href="route('rubro.index')" :current="request()->routeIs('rubro.index')" wire:navigate>
                             {{ __('Rubro') }}
                         </flux:sidebar.item>
