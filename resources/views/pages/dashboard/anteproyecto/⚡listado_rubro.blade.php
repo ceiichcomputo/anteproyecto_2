@@ -25,8 +25,8 @@ new class extends Component
 
     public function mount(?int $anteproyecto_id = null)
     {
-        $service = app(AnteproyectoRubroService::class);
         $this->checkPermission('anteproyecto.listar');
+        $service = app(AnteproyectoRubroService::class);
 
         if($anteproyecto_id){
             $this->anteproyecto = TAnteproyectos::findOrFail($anteproyecto_id);

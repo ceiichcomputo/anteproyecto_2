@@ -4,11 +4,18 @@ use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
 use Livewire\Component;
 use App\Models\TAnteproyectos;
+use App\Livewire\Traits\WithPermissions;
 
 new class extends Component
 {
     use WithPagination;
+    use WithPermissions;
     public $query = '';
+
+    public function mount()
+    {
+        $this->checkPermission('anteproyecto.listar');
+    }
  
     public function search()
     {
