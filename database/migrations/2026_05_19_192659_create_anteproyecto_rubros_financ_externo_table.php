@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('titulo_proyecto');
             $table->text('nombre_dependencia');
             $table->date('fecha_inicio_evento');
-            $table->date('fecha_fin_evento');
             
             $table->foreign('id_anteproyecto_rubros')->references('id')->on('t_anteproyectos_rubros')->onDelete('cascade');
             $table->foreign('id_tipo_financiamiento')->references('id')->on('cat_tipo_financiamientos')->onDelete('cascade');

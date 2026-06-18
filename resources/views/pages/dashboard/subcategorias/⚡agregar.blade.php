@@ -44,7 +44,7 @@ new class extends Component
     public $requiere_comentarios = false;
 
     #[Validate('required', message: 'Favor de ingresar el presupuesto estimado')]
-    #[Validate('gt:0', message: 'El presupuesto estimado debe ser mayor a $0')]
+    // #[Validate('gt:0', message: 'El presupuesto estimado debe ser mayor a $0')]
     public $monto_estimado = 0;
 
     public $categoria;

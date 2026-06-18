@@ -1,7 +1,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
     <div>
-        <flux:textarea label="Descripción del evento" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="descripcion_evento" />
+        <flux:textarea label="Nombre del evento" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="descripcion_evento" />
     </div>
 
     <div>
@@ -9,7 +9,7 @@
     </div>
 
     <div>
-        <flux:textarea label="Procedencia Invitado" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="procedencia_invitado" />
+        <flux:textarea label="Procedencia Invitado (Institución, ciudad, país del invitado)" rows="3" :disabled="!$this->pueden_editar" type="text" wire:model="procedencia_invitado" />
     </div>
 
     <div>

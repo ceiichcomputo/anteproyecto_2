@@ -14,7 +14,7 @@
                 @auth
                     @role('Académico')
                         {{ Auth::user()->detalle->apellido_paterno . ' ' . Auth::user()->detalle->apellido_materno . ' ' . Auth::user()->detalle->nombres }} <br>
-                        Departamente
+                        
                         <br>
                     @endrole
                 @endauth

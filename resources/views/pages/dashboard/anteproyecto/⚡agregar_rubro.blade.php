@@ -146,7 +146,6 @@ new class extends Component
                             $this->titulo_proyecto = $this->obj_ant_rubro_fin_ext->titulo_proyecto;
                             $this->nombre_dependencia = $this->obj_ant_rubro_fin_ext->nombre_dependencia;
                             $this->fecha_inicio_evento = $this->obj_ant_rubro_fin_ext->fecha_inicio_evento;
-                            $this->fecha_fin_evento = $this->obj_ant_rubro_fin_ext->fecha_fin_evento;
                             $this->selected_tipo_financiamiento = $this->obj_ant_rubro_fin_ext->id_tipo_financiamiento;
                             break; 
                         case '5': //Invitados
@@ -564,8 +563,7 @@ new class extends Component
                                 'id_tipo_financiamiento' => $this->selected_tipo_financiamiento,
                                 'titulo_proyecto' => $this->titulo_proyecto,
                                 'nombre_dependencia' => $this->nombre_dependencia,
-                                'fecha_inicio_evento' => $this->fecha_inicio_evento,
-                                'fecha_fin_evento' => $this->fecha_fin_evento
+                                'fecha_inicio_evento' => $this->fecha_inicio_evento
                             ]);
 
                             $this->mensaje = 'Rubro de Eventos actualizado correctamente';
@@ -588,8 +586,7 @@ new class extends Component
                                 'id_tipo_financiamiento' => $this->selected_tipo_financiamiento,
                                 'titulo_proyecto' => $this->titulo_proyecto,
                                 'nombre_dependencia' => $this->nombre_dependencia,
-                                'fecha_inicio_evento' => $this->fecha_inicio_evento,
-                                'fecha_fin_evento' => $this->fecha_fin_evento
+                                'fecha_inicio_evento' => $this->fecha_inicio_evento
                             ]);
 
                             $this->mensaje = 'Rubro de Financiamiento externo creado correctamente';
@@ -860,7 +857,7 @@ new class extends Component
                 case '4': //Financiamiento externo
 
                     $this->validate([
-                        'selected_tipo_financiamiento' => 'required', 'titulo_proyecto' => 'required|string|max:1000', 'nombre_dependencia' => 'required|string|max:1000', 'fecha_inicio_evento' => 'required|date', 'fecha_fin_evento' => 'required|date'
+                        'selected_tipo_financiamiento' => 'required', 'titulo_proyecto' => 'required|string|max:1000', 'nombre_dependencia' => 'required|string|max:1000', 'fecha_inicio_evento' => 'required|date'
                     ],[
                     'selected_tipo_financiamiento.required' => 'Favor de seleccionar el tipo de financiamiento',
                     'titulo_proyecto.required' => 'Favor de ingresar el título del proyecto',
@@ -868,7 +865,6 @@ new class extends Component
                     'nombre_dependencia.required' => 'Favor de ingresar el nombre de la dependencia',
                     'nombre_dependencia.max' => 'La longitud máxima del nombre de la dependencia es de 1000 caracteres',
                     'fecha_inicio_evento.required' => 'Favor de ingresar la fecha de inicio del evento',
-                    'fecha_fin_evento.required' => 'Favor de ingresar la fecha de finalización del evento',
                     ]);
 
                     break;

@@ -25,5 +25,21 @@ class CatTipoFinanciamientoSeeder extends Seeder
             'tipo_financiamiento' => 'Otro',
             'usuario_ins' => 1
         ]);
+        CatTipoFinanciamiento::create([
+            'tipo_financiamiento' => 'PAPIME',
+            'usuario_ins' => 1
+        ]);
+        CatTipoFinanciamiento::create([
+            'tipo_financiamiento' => 'Sector público(Federal, estatal o municipal)',
+            'usuario_ins' => 1
+        ]);
+        CatTipoFinanciamiento::create([
+            'tipo_financiamiento' => 'Sector privado',
+            'usuario_ins' => 1
+        ]);
+        CatTipoFinanciamiento::create([
+            'tipo_financiamiento' => 'Otras universidades, centros o instituciones nacionales',
+            'usuario_ins' => 1
+        ]);
     }
 }
