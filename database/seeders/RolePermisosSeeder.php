@@ -42,7 +42,7 @@ class RolePermisosSeeder extends Seeder
 
         // 3. Crear roles y asignar permisos
         $roleAdmin = Role::create(['name' => 'Administrador']);
-        $roleAdmin->givePermissionTo(['admin.roles.listar', 'admin.roles.editar', 'admin.usuarios.listar', 'admin.usuarios.editar', 'admin.academicos.listar', 'admin.academicos.editar', 'admin.permisos.listar', 'admin.permisos.editar', 'catalogos.categorias.listar', 'catalogos.categorias.editar', 'reportes.anteproyectos']);
+        $roleAdmin->givePermissionTo(['admin.roles.listar', 'admin.roles.editar', 'admin.usuarios.listar', 'admin.usuarios.editar', 'admin.academicos.listar', 'admin.academicos.editar', 'admin.permisos.listar', 'admin.permisos.editar', 'catalogos.rubros.listar', 'catalogos.rubros.editar', 'reportes.anteproyectos']);
 
         // 3. Crear roles y asignar permisos
         $roleAcademico = Role::create(['name' => 'Académico']);
