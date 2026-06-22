@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(['categoria_academica'])]
 class CatCategoriaAcademicas extends Model
 {
+    public $timestamps = false;
+    
     public function rubros_promos()
     {
         return $this->hasMany(

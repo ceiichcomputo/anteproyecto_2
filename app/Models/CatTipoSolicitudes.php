@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable(['tipo_solicitud','usuario_ins'])]
 class CatTipoSolicitudes extends Model
 {
+    public $timestamps = false;
+    
     public function rubros_promos()
     {
         return $this->hasMany(
