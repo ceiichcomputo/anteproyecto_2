@@ -26,17 +26,17 @@ class DatabaseSeeder extends Seeder
             RolePermisosSeeder::class,
             CatCategoriaAcademicasSeeder::class,
             CatRubroSeeder::class,
-            CatCategoriaSeeder::class,
-            CatSubCategoriaSeeder::class,
             CatNombramientoSeeder::class,
-            CatPaisSeeder::class,
-            CatEstadoSeeder::class,
             CatPreguntaSeeder::class,
             CatRespuestaSeeder::class,
             UserAcademicoSeeder::class,
             CatTipoFinanciamientoSeeder::class,
             CatTipoSolicitudesSeeder::class,
             CatEjercicioSeeder::class,
+            CatCategoriaSeeder::class,
+            CatSubCategoriaSeeder::class,
+            CatPaisSeeder::class,
+            CatEstadoSeeder::class,
         ]);
 
 
