@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
          $this->call([
             RolePermisosSeeder::class,
             CatCategoriaAcademicasSeeder::class,
-            CatEjercicioSeeder::class,
             CatRubroSeeder::class,
             CatCategoriaSeeder::class,
             CatSubCategoriaSeeder::class,
@@ -37,6 +36,7 @@ class DatabaseSeeder extends Seeder
             UserAcademicoSeeder::class,
             CatTipoFinanciamientoSeeder::class,
             CatTipoSolicitudesSeeder::class,
+            CatEjercicioSeeder::class,
         ]);
 
 
