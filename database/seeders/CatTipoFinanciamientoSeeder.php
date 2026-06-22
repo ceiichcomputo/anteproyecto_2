@@ -14,32 +14,25 @@ class CatTipoFinanciamientoSeeder extends Seeder
     public function run(): void
     {
         CatTipoFinanciamiento::create([
-            'tipo_financiamiento' => 'PAPIIT',
-            'usuario_ins' => 1
+            'tipo_financiamiento' => 'PAPIIT'
         ]);
         CatTipoFinanciamiento::create([
-            'tipo_financiamiento' => 'CONACYT',
-            'usuario_ins' => 1
+            'tipo_financiamiento' => 'CONACYT'
         ]);
         CatTipoFinanciamiento::create([
-            'tipo_financiamiento' => 'Otro',
-            'usuario_ins' => 1
+            'tipo_financiamiento' => 'Otro'
         ]);
         CatTipoFinanciamiento::create([
-            'tipo_financiamiento' => 'PAPIME',
-            'usuario_ins' => 1
+            'tipo_financiamiento' => 'PAPIME'
         ]);
         CatTipoFinanciamiento::create([
-            'tipo_financiamiento' => 'Sector público(Federal, estatal o municipal)',
-            'usuario_ins' => 1
+            'tipo_financiamiento' => 'Sector público(Federal, estatal o municipal)'
         ]);
         CatTipoFinanciamiento::create([
-            'tipo_financiamiento' => 'Sector privado',
-            'usuario_ins' => 1
+            'tipo_financiamiento' => 'Sector privado'
         ]);
         CatTipoFinanciamiento::create([
-            'tipo_financiamiento' => 'Otras universidades, centros o instituciones nacionales',
-            'usuario_ins' => 1
+            'tipo_financiamiento' => 'Otras universidades, centros o instituciones nacionales'
         ]);
     }
 }
